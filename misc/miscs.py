@@ -1,9 +1,10 @@
 from . import alpha, _alpha
-from .abilities import numable,counterable
+from .abilities import numable, counterable
 from .gen import getter
 from math import e
-from engpy.errors.exceptions import InvalidOperation
+from engpy.errors.exceptions import InvalidOperation, UnacceptableToken
 from engpy.errors.wreck import Fizzle
+
 
 def num(num_):
     try:
@@ -16,16 +17,22 @@ def num(num_):
             return 1
         raise InvalidOperation(f"You can't take the numeric value of {num_}, you can try alnum({num_})")
 
+
 def simp_var():
     for var in alpha:
-        if var in ['e','ȩ','î','ĵ', 'ǩ']:
+        if var in ['e', 'ȩ', 'î', 'ĵ', 'ǩ']:
             continue
         yield var
+
+
 def simp_Var():
     for var in _alpha:
         yield var
+
+
 def _isinstance(cls,obj):
     return f"<class '__main__.{obj}'>" == format(type(cls))
+
 
 def numity(num):
     try:
@@ -36,12 +43,15 @@ def numity(num):
     except Exception:
         return None
 
+
 def nums(*num_):
     return [num(num_s) for num_s in num_]
+
 
 def alnums(*num_):
     
     return [alnum(num_s) for num_s in num_]
+
 
 def counternum(num_):
     if counterable(num_):
@@ -55,7 +65,8 @@ def counternum(num_):
             break
     return num(couter)
 
-def alnum(al, exp = False):
+
+def alnum(al, exp=False):
     if isinstance(al, set):
         al = list(al)[0]
     elif isinstance(al, (int, float, str)) and not al:
@@ -85,6 +96,7 @@ def alnum(al, exp = False):
         exp = Expr(format(al)); simp = exp.desolved
         nmm = numity(simp)
         return nmm if nmm is not None else simp
+
 
 def fnum(al, exp = False):
     if isinstance(al, set):
@@ -122,7 +134,8 @@ def fnum(al, exp = False):
         if nmm:
             return nmm
         raise Fizzle(f"{al} can't be forcefully taken as a number")
-    
+
+
 def lexpr(*expr):
     try:
         Expr

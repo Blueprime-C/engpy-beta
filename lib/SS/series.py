@@ -7,7 +7,7 @@ from engpy.misc.miscs import num
 
 class base:
 
-    def __new__(cls, expr = '',nth = 'n', l_bound = 1, u_bound = 100, step = 1, inv = [], **kwargs):
+    def __new__(cls, expr='', nth='n', l_bound=1, u_bound=100, step=1, inv=[], **kwargs):
         self = super(base, cls).__new__(cls)
         self.expr =  Expr(expr)
         self.nth = nth
@@ -165,7 +165,7 @@ class AP(Series):
 
 
 class GP(Series):
-    def __init__(self, expr = '',nth = 'n', l_bound = 1, u_bound = 100, inv = [], **kwargs):
+    def __init__(self, expr='', nth='n', l_bound=1, u_bound=100, inv=[], **kwargs):
         self.name = 'GP'
         if not expr or getter(expr,'name') == 'Expr':
             self.expr = Series('ar^(n-1)',nth = 'n', l_bound = 1, u_bound = 100, inv = []).expr

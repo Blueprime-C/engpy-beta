@@ -4,6 +4,7 @@ from engpy.fundamentals.primary import Num
 from engpy import AI
 from engpy.AI.settings import const, configuration
 from engpy.fundamentals.secondary import pascal
+from engpy.fundamentals.assorted import GCD
 from engpy.misc.gen import con, reverse, getter, startwith, th
 from engpy.misc.gen import start_alpha_index, rev
 from engpy.misc.gen import check_rest, dstar, imap
@@ -20,7 +21,6 @@ from engpy.misc.vars import greek_map, constants
 from engpy.misc.vars import chars
 from engpy.misc.helpers import toClass, cross, Mul
 from engpy.misc.miscs import num, alnum, numity
-from engpy.repl.compiles import brackets, inbrackets
 from engpy.lib.transforms import Transforms
 from engpy.oblects.abc import Utilities, UtilityClass
 from engpy.oblects.abc import ExpressionObjectClass
@@ -2308,7 +2308,7 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
     def factorize(self, obj=True, force=False):
         neg = True
         coeff = []
-        print(self, 'fgngf', list(self.expr))
+        print(self, 'fgngf', self.expr, list(self.expr))
         for coeffs in list(self.expr):
             if coeffs > 0: neg = False
             print(coeffs)
@@ -2316,14 +2316,15 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
         print(coeff, 'uuk')
         coeff = Num(*coeff).GCD()
         coeff *= -1 if neg else 1
-        common = {}
-        alls = Expr({})
+        common, alls = {}, Expr({})
         sep = True if len(self) > 2 else False
         seps = Expr({})
         for exprs in self.struct:
             _coeff, var = exprs.__extract__
             iscom = False
+            print(exprs, 'tghh', _coeff)
             for vvs, pows in var.items():
+                print(vvs, 'thh', pows, common)
                 if not common:
                     common = var
                     alls += exprs

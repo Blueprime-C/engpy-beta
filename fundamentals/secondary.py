@@ -1,5 +1,5 @@
-from .primary import Num
+from .assorted import C
 
 
 def pascal(index):
-    return [Num(index, base).C() for base in range(index + 1)]
+    return [C(index, base) for base in range(index + 1)]

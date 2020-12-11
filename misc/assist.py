@@ -24,32 +24,38 @@ def m_char(char,times = 1):
 def once():
     return '  %/--\n#\/ x'
 
+
 class pr_rt:
     def __init__(self,num,s = False):
         if s:
             self.form = num
             return 
         num = str(num)
-        self.form =  once().replace('x',num).replace('--',m_char('-',len(num) + 1))
+        self.form = once().replace('x',num).replace('--',m_char('-', len(num) + 1))
+
     def __str__(self):
-        return self.form.replace('#','').replace('%','')
+        return self.form.replace('#','').replace('%', '')
+
     def __add__(self,other):
-        if isinstance(other,pr_rt):
-            return pr_rt(self[1] + ' ' +other[1] + self[2] + ' '+ other[2].replace('\n',' '),True)
+        if isinstance(other, pr_rt):
+            return pr_rt(self[1] + ' ' + other[1] + self[2] + ' ' + other[2].replace('\n', ' '), True)
         else:
-            return pr_rt(self[1] + ' ' +m_char(' ',len(other)) + self[2] + ' '+ other,True)
-    def __radd__(self,other):
+            return pr_rt(self[1] + ' ' + m_char(' ', len(other)) + self[2] + ' ' + other, True)
+
+    def __radd__(self, other):
         other = str(other)
-        return pr_rt(self.form.replace('#',f'#{other}').replace('%',f'%{m_char(" ",len(other))}'),True)
-    def __getitem__(self,index):
+        return pr_rt(self.form.replace('#', f'#{other}').replace('%', f'%{m_char(" ", len(other))}'), True)
+
+    def __getitem__(self, index):
         if index == 1:
             return self.form[:self.form.index('\n')]
         elif index == 2:
             return self.form[self.form.index('\n'):]
-            
+
+
 def d2lst(D):
     string = []
-    disp = '';
+    disp = ''
     for coeff in D:
         if not coeff:
             continue
@@ -70,19 +76,22 @@ def d2lst(D):
                 pw = ''
                 if expr_[var] != 1 and expr_[var] != 0:
                     pw += '-' if expr_[var] == -1 else f"{expr_[var]}"
-                disp += f'({var})^{pw}' if not '##' in str(var) else f'{var}'.replace('##',pw).replace('sin-','cosec').replace('cos-','sec').replace('tan-','cot') if var else str(abs(coeff)) if not disp else ''
+                disp += f'({var})^{pw}' if '##' not in str(var) else f'{var}'.replace('##',pw).replace('sin-','cosec').replace('cos-','sec').replace('tan-','cot') if var else str(abs(coeff)) if not disp else ''
             string.append(disp)
     return string if string else ['0']
+
 
 def cd2str(cls):
     return ''.join(d2lst(cls.expr))
 
-def join(d1,d2):
+
+def join(d1, d2):
     d1.update({keys : values for keys, values in d2.items()})
 
     return d1
 
-def arrange(elem,stray =  False):
+
+def arrange(elem, stray=False):
     elem = con_(elem)
     if '^' in elem:
         return elem
@@ -90,7 +99,7 @@ def arrange(elem,stray =  False):
     coeff = elem[:elem.index(char)]
     elem_ = elem[elem.index(char):]
     elem_ = elem_.split(')')
-    for count ,elems in enumerate(copy(elem_)):
+    for count, elems in enumerate(copy(elem_)):
         elem_[count] = elems + ')' if '(' in elems else elems
     _elem_ = []
     for alphas in alpha:
@@ -100,6 +109,7 @@ def arrange(elem,stray =  False):
     _elem_.sort()
     return (coeff + ''.join(_elem_)).replace('cos(0)','')
 
+
 def arrange_(elem):
     elem = _con(elem)
     char = startwith(elem)
@@ -107,23 +117,24 @@ def arrange_(elem):
     elem_ = elem[elem.index(char):]
     elem_ = elem_.split('#')
     elem_.sort()
-    return coeff +''.join(elem_) if coeff != '1' else ''.join(elem_)
+    return coeff + ''.join(elem_) if coeff != '1' else ''.join(elem_)
+
 
 def _copy(obj, deep = False):
     
-    if isinstance(obj,(str,int,float)):
+    if isinstance(obj, (str, int, float)):
         return obj
-    elif isinstance(obj,list):
+    elif isinstance(obj, list):
         return [(_copy(items) if not deep else deepcopy(items)) for items in obj]
-    elif isinstance(obj,set):
+    elif isinstance(obj, set):
         return {(_copy(items) if not deep else deepcopy(items)) for items in obj}
-    elif isinstance(obj,dict):
+    elif isinstance(obj, dict):
         return {(_copy(keys) if not deep else deepcopy(keys)): (_copy(values) if not deep else deepcopy(values)) for keys, values in obj.items()}
-    elif getter(obj,'name') in ('Expr','Fraction','log','trig','tan'):
+    elif getter(obj, 'name') in ('Expr', 'Fraction', 'log', 'trig', 'tan'):
         return copy(obj)
-    elif getter(obj, 'name') in ('sin','cos'):
+    elif getter(obj, 'name') in ('sin', 'cos'):
         return deepcopy(obj)
-    elif getter(obj,'name') == 'Log':
+    elif getter(obj, 'name') == 'Log':
         return obj.__copy__()
     
 
@@ -137,12 +148,14 @@ def refract(d):
             d_.update({keys:values})
     return d_
 
+
 def copy(obj):
     if getter(obj, 'name') in ('sin', 'cos'):
         return deepcopy(obj)
     
     return (getter(obj,'recreate')(_copy(obj.expr)) if getter(obj,'recreate') else _copy(obj.expr)) if getter(obj,'recreate') else _copy(obj)
-                 
+
+
 def deepcopy(obj, skip = ''):
     if not getter(obj,'name'):
         return _copy(obj, deep = True)
@@ -154,7 +167,6 @@ def deepcopy(obj, skip = ''):
             continue
         setattr(new_obj,attr,deepcopy(values))
     return new_obj
-
 
 
 def get_exprs(exprs, step  = 0):
@@ -169,6 +181,7 @@ def get_exprs(exprs, step  = 0):
         step += 1
     return exprs[_step:step+1], step + 1
 
+
 def rev_get_exprs(exprs, step = -1, rev = True):
     brac = 0;_brac = 0; _step = step
     while step > 0 or step < -len(exprs):
@@ -181,10 +194,10 @@ def rev_get_exprs(exprs, step = -1, rev = True):
         step -= 1
         
     if rev:
-        expr = list(exprs[step+1: _step]); expr.reverse()
-        return ''.join(expr), step - 1
+        exprs = list(exprs[step+1: _step]); exprs.reverse()
+        return ''.join(exprs), step - 1
     else:
-        return expr
+        return exprs
     
 
 def get_coeff(exprs,step):
@@ -224,14 +237,16 @@ class List(list):
             if items != start:
                 return False
         return True
+
     
 def mul(_list):
-    if not isinstance(_list,(list,tuple)):
+    if not isinstance(_list, (list, tuple)):
         raise UnacceptableToken(f'parameter must be a list object not {type(_list)}')
     mul_ = 1
     for items in _list:
         mul_ *= items
     return mul_
+
 
 class Misc:
     def __init__(self, arg):
@@ -240,7 +255,8 @@ class Misc:
     def __contains__(self,arg):
         if isinstance(arg, (list,tuple)):
             return bool(['2' for args in arg if args in self.arg])
-        
+
+
 def match_curly(string):
     start = string.index('{')
     match = []; sub = ''
@@ -253,6 +269,7 @@ def match_curly(string):
         elif sub:
             sub += s
     return match
+
 
 def get_den(exprs):
     if getter(exprs, 'name') == 'Fraction':
