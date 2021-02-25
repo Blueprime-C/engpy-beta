@@ -8,6 +8,7 @@ from engpy.misc.assist import deepcopy
 from engpy.errors.exceptions import *
 from engpy.errors.wreck import Fizzle
 
+
 class BaseClass(object):
 
     """Parent Class for all engpy Objects"""
@@ -21,8 +22,10 @@ class BaseClass(object):
         if getter(self,'form'):
             return self.form()
         return NotImplemented
+
     def __instancecheck__(self, ins):
         return self.form() is ins
+
 
 class ExpressionObjectClass(BaseClass):
 
@@ -35,6 +38,7 @@ class ExpressionObjectClass(BaseClass):
 
     def __iter__(self):
         return iter1(self)
+
 
 class MatrixObjectClass(BaseClass):
     @property

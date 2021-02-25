@@ -1,9 +1,8 @@
 from fractions import Fraction
 
-from engpy.fundamentals.primary import Num
-
 
 def whole(lst):
+    from engpy.fundamentals.primary import Num
     den = Num(*[Fraction(lsts).limit_denominator().denominator for lsts in lst]).LCM()
     return [lsts * den for lsts in lst]
 
@@ -29,6 +28,12 @@ def con_(dic, sep='##'):
             return con(dic)
         res += f'{key}'.replace(sep,str(value).replace(' ',''))
     return res
+
+def dict_uncommon(x,y):
+    dict_1 = {k: v for k, v in x.items() if k not in y or y[k] != v}
+    dict_1.update({k: v for k, v in y.items() if k not in x or x[k] != v})
+
+    return dict_1
 
 
 def com_arrays(x,y):
@@ -77,7 +82,7 @@ def start_alpha_index(s):
 
 def getter(cls,attr):
     try:
-        return getattr(cls,attr)
+        return getattr(cls, attr)
     except AttributeError:
         return None
 
@@ -126,3 +131,4 @@ def imap(*iterables):
             yield next_
         else:
             break
+

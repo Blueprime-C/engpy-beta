@@ -1,4 +1,4 @@
-'''This module implements and provides Vector Operation to engpy'''
+"""This module implements and provides Vector Operation to engpy"""
 import math
 from operator import mul, add
 from engpy.errors.exceptions import *
@@ -10,14 +10,16 @@ from engpy.interface import arccos
 from engpy.misc.assist import getter
 from engpy.misc.gen import check_rest
 from engpy.oblects.abc import BaseClass
+
 _complex()
 
-from engpy.interface import i,j,k,_i,_j,_k
-component = [_i,_j,_k]
+from engpy.interface import i, j, k, _i, _j, _k
+component = [_i, _j, _k]
+
 
 class Vector(BaseClass):
-    def __init__(self,cexp):
-        '''Vector Objects (VectObjs) can be created by calling the Vector Class
+    def __init__(self, cexp):
+        """Vector Objects (VectObjs) can be created by calling the Vector Class
            if R = xî + yĵ + zǩ
            To represent R as VectObj, then
            This can be either
@@ -32,7 +34,7 @@ class Vector(BaseClass):
                     >>> R = Vector(r)
                 3. parsing as a string
                     >>> R = Vector('xi + yj +zk')
-        '''
+        """
         self.name = 'Vector'
         if not cexp:
             self.vec = Var(cexp)
@@ -61,7 +63,6 @@ class Vector(BaseClass):
                                                      _j).replace('k',
                                                                  _k)).simp()
 
-    
     def __str__(self):
         add = []; k = self.i, self.j, self.k
         if i:
@@ -83,29 +84,28 @@ class Vector(BaseClass):
         return ''.join(add)
     
     def __setitem__(self,other,value):
-        '''To change the coefficient of the planes, use 1,2,3 for the planes respectively or
+        """To change the coefficient of the planes, use 1,2,3 for the planes respectively or
            the plane itself
            R = xî + yĵ + zǩ
            to change i component to 2x^2 - y and k component to z^2 + 2x
            >>> R = Vector('xi + yj +zk')
            >>> R[1] = '2x^2 - y'  # or R['i'] = '2x^2 - y'
            >>> R[k] = 'z^2 + 2x'
-        '''
+        """
         if other in ('i', _i, 1, i):
             self.vec = (self.vec - i * self.i + i * Var(value)).simp()
         elif other in ('j', _j, 2, j):
             self.vec = (self.vec - j * self.j + j * Var(value)).simp()
         elif other in ('k', _k, 3, k):
             self.vec = (self.vec - k * self.k + k *Var(value)).simp()
-        
-        
+
     def __getitem__(self,other):
-        '''VectObj[x] -> x can be either 1, 2 ,3 or the planes (i,j,k)'''
+        """VectObj[x] -> x can be either 1, 2 ,3 or the planes (i,j,k)"""
         return self.i if other in (1,_i, i, 'i') else self.j if other in (2,_j,j,'j') else self.k if other in (3,_k, k,'k') else None
     
     @property
     def vars(self):
-        '''returns all the variables in the VectObj'''
+        """returns all the variables in the VectObj"""
         var_list = self.vec.vars
         if _i in var_list:
             var_list.remove(_i)
@@ -117,7 +117,7 @@ class Vector(BaseClass):
 
     @property
     def i(self):
-        '''returns the i component of the VectObj'''
+        """returns the i component of the VectObj"""
         return self.vec.coeff(_i)
 
     @property
@@ -168,16 +168,16 @@ class Vector(BaseClass):
             return '0'
         return ''.join(add)
 
-    
-
     @property
     def theta_x(self):
         '''returns the directional cosine in x direction'''
         return self.i/abs(self)
+
     @property
     def theta_y(self):
         '''returns the directional cosine in y direction'''
         return self.j/abs(self)
+
     @property
     def theta_z(self):
         '''returns the directional cosine in z direction'''
@@ -211,7 +211,7 @@ class Vector(BaseClass):
         return self/abs(self)
     
     def tangent(self,**var):
-        '''returns the tangent of the VectObj
+        """returns the tangent of the VectObj
 
            Determine the tangent vector at point (2,4,7) for the curve with
            parametric equation
@@ -233,7 +233,7 @@ class Vector(BaseClass):
 
            A particle moves in space so that at time t its position is stated as
            x = 2t + 3, y = t^2 + 3t, z = t^3 + 2t^2. Find the component of velocity
-        '''
+        """
         return self.lin_diff(list(var)[0]).simp(**var)
     
     def _simp(self, **values):
@@ -249,13 +249,13 @@ class Vector(BaseClass):
         return self
     
     def simp(self,**values):
-        '''Evaluating and substituting values into the VectObj
+        """Evaluating and substituting values into the VectObj
            e.g VectObj.simp(x =4)
-        '''
+        """
         return self._simp(**values) if values else self
     
     def grad(self,scalar,*func, **pts):
-        '''returns the grad of a scalar
+        """returns the grad of a scalar
            the scalar can be a string or ExprObj, by default func is
            x : i, y:j , z: k pair
            
@@ -263,8 +263,7 @@ class Vector(BaseClass):
 
            >>> vec.grad('3x^2y - y^3z^2', x = 1, y = -2, z = -1)
            - 12î - 9ĵ - 16ǩ
-           
-        '''
+        """
             
         if getter(scalar, 'name') != 'Expr':
             scalar = Var(scalar)
@@ -272,7 +271,7 @@ class Vector(BaseClass):
             if len(func) == 1 and isinstance(func[0], dict):
                 func = func[0]
             elif len(func) != 3:
-                raise UnaccpetableToken
+                raise UnacceptableToken
             else:
                 func = dict(zip(('x','y','z'),func))
         else:   
@@ -297,7 +296,7 @@ class Vector(BaseClass):
         '''
         if func:
             if len(func) != 3:
-                raise UnaccpetableToken
+                raise UnacceptableToken
             func = dict(zip(('x','y','z'),func))
         else:   
             func = {'x':i,'y':j,'z':k} 
@@ -330,7 +329,7 @@ class Vector(BaseClass):
         '''
         if func:
             if len(func) != 3:
-                raise UnaccpetableToken
+                raise UnacceptableToken
             func = dict(zip(('x','y','z'),func))
         else:   
             func = {'x':i,'y':j,'z':k} 
@@ -353,7 +352,7 @@ class Vector(BaseClass):
         return not self & other
     
     def div(self,planes = ('x','y','z'), **pts):
-        ''' returns the divergence of a VectObj on planes
+        """ returns the divergence of a VectObj on planes
             By default the planes are x, y, z
 
             if u =  x^2 + y^2 + z^2, and r = xî + yĵ + zǩ, then find div(ur)
@@ -362,7 +361,7 @@ class Vector(BaseClass):
             >>> r = Vector('xî + yĵ + zǩ')
             >>> (u * r).div()
             5x^2 + 5y^2 + 5z^2
-        '''
+        """
         return (self.i.lin_diff(planes[0]) +
                 self.j.lin_diff(planes[1]) +
                 self.k.lin_diff(planes[2])
@@ -407,7 +406,7 @@ class Vector(BaseClass):
             raise InvalidOperation('Multiplication only take btwn Vectors Only or scalars')
         if isinstance(other,(int,float)) or getter(other, 'name') == 'Expr':
             if not isinstance(other,(int,float)) and other.vectorized:
-                other = vector(other)
+                other = Vector(other)
             else:
                 vec = self.empty
                 vec.vec = other * self.vec
@@ -463,6 +462,9 @@ class Vector(BaseClass):
         '''returns True  if the 3 VectObjs re coplanar else False'''
         return True if not self.s_trip(other,_other) else False
 
+
 def _del(var = ('x','y','z')):
     return [f'.F{var_}' for var_ in var]
+
+
 vec = Vector('')

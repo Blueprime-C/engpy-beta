@@ -1,10 +1,11 @@
 
 import copy as cy
-from .miscs import num,counternum
+from .miscs import num, counternum
 from .vars import alpha, greek_map
-from .gen import startwith,con_,_con,getter, rev
+from .gen import startwith, con_, _con, getter, rev
 from .abilities import numable
 from engpy.errors.exceptions import *
+
 
 def wrap(char,char_space):
     string = ''; char = str(char)
@@ -14,12 +15,14 @@ def wrap(char,char_space):
     if len(string) < char_space:
         string += ' '
     return string
-        
+
+
 def m_char(char,times = 1):
     char_ = ''
     for i in range(times):
         char_ += char
     return char_
+
 
 def once():
     return '  %/--\n#\/ x'
@@ -228,7 +231,8 @@ class Dict:
     @property
     def list(self):
         return [[keys, values] for keys, values in self.dic.items()]
-    
+
+
 class List(list):
     @property
     def unique(self):
@@ -311,3 +315,44 @@ def get_num(exprs):
                     den_list[var] = pows
                 
     return [keys**values for keys, values in den_list.items()]
+
+
+def factor_out(expr, factor=1):
+    constant, gcd = factor.__extract__
+    factors, new_exprs, create = {}, expr.recreate({}), expr.recreate
+    for gcds, powers in gcd.items():
+        if len(gcds) == 1:
+            constant *= (create(gcds) if isinstance(gcds, str) else gcds) ** powers
+        elif len(gcds) > 1:
+            factors.update({gcds: powers})
+    for exprs in expr.struct:
+        coeff_, terms = exprs.__extract__
+        divisor = 1
+        for gcds, powers in factors.items():
+            if gcds in terms:
+                cleared = True
+            elif -gcds in terms:
+                coeff_, gcds, cleared = coeff_ * (-1) ** powers, -gcds, True
+            if cleared:
+                power = terms[gcds] - powers
+                if not power: terms.pop(gcds)
+                elif power > 0: terms[gcds] = power
+                elif power < 0: divisor *= gcds ** powers
+            else:
+                divisor *= gcds ** powers
+        new_exprs += (create({coeff_: [terms]}) / constant) / divisor
+    return new_exprs
+
+
+def num_mul(*nums):
+    nums = sorted(list(nums), reverse=True)
+    sus = {}; i = 0
+    if List(nums).unique: return None, None
+    while i in range(len(nums)):
+        if not i: i += 1;continue
+        f = -nums[i] + nums[i-1]
+        if f in sus: sus[f] += 1
+        else:sus[f] = 1
+        i += 1
+    sus_1, sus_2 = list(sus), list(sus.values())
+    return sus_1[sus_2.index(max(sus_2))], max(sus_2) + 1

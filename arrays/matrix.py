@@ -333,7 +333,7 @@ class Matrix(MatrixObjectClass, Utilities.matrix, StaticStates):
         '''returns the modal matrix of the MatObj'''
         return self.matrix_.modal().matrix
     
-    @property       
+    @property
     def type(self):
         '''returns the type of the Matrix'''
         attr = []
@@ -1580,6 +1580,7 @@ class Matrix_(MatrixObjectClass, Utilities.matrix, StaticStates):
                 if self[integer+1,integers+1]:
                     return True
         return False
+
 
 InitMat = Matrix_({'!@#$%^&'})
 mat_ = Matrix_({'!@#$%^&'})

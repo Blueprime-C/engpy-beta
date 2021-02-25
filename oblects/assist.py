@@ -2,6 +2,7 @@ from engpy.misc.assist import getter
 from engpy.misc.miscs import alnum
 from engpy.errors.exceptions import *
 from engpy.misc.abilities import numable
+from engpy.fundamentals.assorted import CD
 
 
 def New_Raph(self,var):
@@ -11,7 +12,7 @@ def New_Raph(self,var):
     derivative = self.lin_diff(var)
     if not derivative:
         raise ZeroDivisionError
-    eval_ = derivative.cal({var: starter}, desolved = True)
+    eval_ = derivative.cal({var: starter}, desolved=True)
     if eval_.iscomplex:
         raise OperationNotAllowed
     if not eval_:
@@ -23,7 +24,7 @@ def New_Raph(self,var):
         starter = modified_New_Raph(self, var, starter)
         if starter.iscomplex:
             raise OperationNotAllowed
-    count = 0; grace = 0; equals = 0; prev_ = self.recreate(0); grad = 0
+    count, grace, equals, prev_ = 0, 0, 0, self.recreate(0)
     while True:
         try:
             
@@ -48,7 +49,7 @@ def New_Raph(self,var):
         except InvalidOperation:
             raise ImprobableError
         if count > 15:
-            if (grad > 0 and grad > prev) or  (grad < 0 and grad < prev) :
+            if (grad > 0 and grad > prev) or (grad < 0 and grad < prev):
                 if grace > 5:
                     
                     if not round(self.cal({var: starter}), 10):
@@ -67,13 +68,12 @@ def New_Raph(self,var):
         count += 1
     return starter.simp()
 
+
 def modified_New_Raph(self, var, value):
     if getter(self, 'name') != 'Expr':
         raise UnacceptableToken(f'only Expr objects are allowed')
     derivative = self.lin_diff(var)
-    incr = derivative.lin_diff(var,1,{var:value}, desolved = True)
+    incr = derivative.lin_diff(var, 1, {var: value}, desolved=True)
     fx = self.cal({var: value})
     approx = alnum((-2 * fx/incr) ** .5)
-    return value + approx if alnum(derivative.cal({var:value}, desolved = True)) * alnum(fx) < 0 else value - approx
-        
-    
+    return value + approx if alnum(derivative.cal({var: value}, desolved=True)) * alnum(fx) < 0 else value - approx

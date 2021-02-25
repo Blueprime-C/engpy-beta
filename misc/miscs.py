@@ -136,6 +136,10 @@ def fnum(al, exp = False):
         raise Fizzle(f"{al} can't be forcefully taken as a number")
 
 
+def roundnum(nums):
+    nums= num(nums)
+    return int(nums) + 1 if round(nums, 10) == int(nums) + 1 else nums
+
 def lexpr(*expr):
     try:
         Expr

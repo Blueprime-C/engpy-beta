@@ -59,20 +59,23 @@ class iter1:
                                 _var__ = _var__[start_alpha_index(_var__):]
                     if expr_[var] != 1 and expr_[var]:
                         pow_ = f"{expr_[var]}"
-                        pow_ = '^' +pow_ if len(pow_) == 1 else f'^({pow_})'
+                        pow_ = '^' + pow_ if len(pow_) == 1 else f'^({pow_})'
                         _var__ += pow_
                     disp_ += _var__
 
-                yield ((f'{coeff}' if not str(coeff).replace(' ','')[0].isalnum() else f' + {coeff}') if emb else disp_)
+                yield (f'{coeff}' if not str(coeff).replace(' ', '')[0].isalnum() else f' + {coeff}') if emb else disp_
 
     def __next__(self):
         return next(self.it)
+
     def __iter__(self):
         return self
+
 
 def rep_coeff(expr):
     coeff = expr._coeff
     return expr.recreate({1: expr.expr[coeff]}), coeff
+
 
 class Range:
     def __init__(self, start = 0, end = '', step = 1):
@@ -91,6 +94,7 @@ class Range:
 
     def __iter__(self):
         self.state = self.start - self.step
+
         def _next(self):
             while True:
                 self.state += self.step
@@ -108,15 +112,16 @@ class Range:
 
     __repr__ = __str__
 
+
 class mat_iter:
-    def __init__(self,Mat):
+    def __init__(self, Mat):
         self.n = 1
         self.stop = Mat.rows
         self.step = 1
         self.Mat = Mat
         
     def __next__(self):
-        if (self.n > self.stop):
+        if self.n > self.stop:
             raise StopIteration
         row = self.Mat.get_row(self.n)
         self.n += self.step
@@ -125,15 +130,16 @@ class mat_iter:
     def __iter__(self):
         return self
 
+
 class element:
-    def __init__(self,Mat):
+    def __init__(self, Mat):
         self.n = 1
         self.stop = len(Mat)
         self.step = 1
         self.Mat = Mat
         
     def __next__(self):
-        if (self.n > self.stop):
+        if self.n > self.stop:
             raise StopIteration
         row = self.Mat[self.n]
         self.n += self.step
@@ -142,15 +148,16 @@ class element:
     def __iter__(self):
         return self
 
+
 class mat_iter_col:
-    def __init__(self,Mat):
+    def __init__(self, Mat):
         self.n = 1
         self.stop = Mat.cols
         self.step = 1
         self.Mat = Mat
         
     def __next__(self):
-        if (self.n > self.stop):
+        if self.n > self.stop:
             raise StopIteration
         row = self.Mat.get_col(self.n)
         self.n += self.step
@@ -158,3 +165,4 @@ class mat_iter_col:
     
     def __iter__(self):
         return self
+

@@ -1,7 +1,6 @@
 from math import factorial
 from engpy.misc.assist import getter
 from .primary import Num
-from .xtension import EGCD
 
 
 def P(n, r):
@@ -13,7 +12,13 @@ def C(n, r):
 
 
 def GCD(*factors):
+    if len(factors) == 1: return factors[0]
+    from .xtension import EGCD
     for factor in factors:
         if getter(factor, 'name') == 'Expr':
             return EGCD(*factors)
     return Num(*factors).GCD()
+
+
+def CD(neg=False, *factors):
+    return GCD(*factors) not in (-1, 1) if neg else GCD(*factors) != 1

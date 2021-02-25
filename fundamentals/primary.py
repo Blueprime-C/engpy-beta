@@ -1,15 +1,17 @@
 from math import factorial
-from engpy.errors.exceptions import InvalidOperation
+from engpy.errors.exceptions import InvalidOperation, UnacceptableToken
+from engpy.misc.abilities import intable, roundnumable
+from engpy.misc.miscs import num, roundnum
 
 
 class Num:
     def __init__(self, *Num_list):
-        if len(Num_list) == 1 and isinstance(Num_list[0],int):
-            self.int = Num_list[0]
+        if len(Num_list) == 1 and (intable(Num_list[0]) or roundnumable(Num_list[0])):
+            self.int = roundnum(Num_list[0])
         elif len(Num_list) > 1:
             self.list = Num_list
         else:
-            raise TypeError(str(Num_list) + 'is not an integer')
+            raise UnacceptableToken(str(Num_list) + 'is not an integer')
         
     def is_prime(self, start=2):
         if isinstance(self.int,int) and not self.int == 1:
@@ -55,8 +57,8 @@ class Num:
             return True
         return False
 
-    def prime_factors(self):
-        factor_list =[];starter = self.int
+    def prime_factors(self, inlist=False):
+        factor_list =[]; starter = self.int
         while True:
             divisor = Num(int(starter)).FirstDivisor()
             if divisor not in factor_list:
@@ -64,7 +66,7 @@ class Num:
             starter /= divisor
             if starter == 1:
                 break
-        return Data(factor_list).to_str(', ')
+        return Data(factor_list).to_str(', ') if not inlist else factor_list
 
     def in_prime_factors(self):
         factor_list =[];starter = self.int
@@ -163,7 +165,8 @@ class Data:
             counter += 1
         return Str
 
-    def count(self,exception=[],split_=' '):
+    def count(self, exception='', split_=' '):
+        if not exception: exception = []
         temp = [];item_list =[]; occurence = []
         for char in self.str.split(split_):
             if not char in temp and not char in exception:
@@ -218,3 +221,22 @@ class dic:
                 break
         return occurence
 
+
+def break_pq(numy, index=2, out=2):
+    numy_ = numy; numy = abs(numy); prime_lists = reversed(Num(numy).prime_factors(True))
+    for primes in prime_lists:
+        if intable(numy ** (1/index)): return [num(numy_/numy), num(numy)] if out == 2 else numy
+        numy /= primes
+
+    return [num(numy_ / numy), num(numy)] if out == 2 else numy
+
+
+def count_powers(numy, number):
+    if number == 1:
+        raise UnacceptableToken('1 not accepted')
+    n = 0
+    while True:
+        numy /= number
+        if numy == 1: return n + 1
+        elif isinstance(numy, float): return None
+        n += 1

@@ -1,12 +1,11 @@
 class Inf:
-    def __init__(self, sign = '+'):
+    def __init__(self, sign='+'):
         self.type = 1 if sign == '+' else -1 if sign == '+-' else 0
 
     def __neg__(self):
         v = Inf()
         v.type = 0
         return v
-
 
     def __bool__(self):
         return bool(self.type)
@@ -26,7 +25,7 @@ class Inf:
 
     @property
     def pos(self):
-        return self.type >= 1 else False
+        return self.type >= 1
 
     @property
     def neg(self):

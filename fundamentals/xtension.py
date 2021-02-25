@@ -1,10 +1,10 @@
 from .primary import Num
-from engpy.misc.assist import getter, mul
-from engpy.misc.helpers import cross
+from engpy.misc.assist import getter, mul, copy
 from engpy.errors.exceptions import UnacceptableToken, OperationNotAllowed
 
 
 def efactors(exprs):
+    from engpy.misc.helpers import cross
     if getter(exprs, 'name') != 'Expr':
         raise UnacceptableToken(f'Expr Objs are expected not {type(exprs)}')
     if len(exprs) > 1:
@@ -21,6 +21,7 @@ def efactors(exprs):
 
 
 def Dfactors(exprs, coeff=True):
+    from engpy.misc.helpers import cross
     if getter(exprs, 'name') != 'Expr':
         raise UnacceptableToken(f'Expr Objs are expected not {type(exprs)}')
     if len(exprs) > 1:
@@ -43,15 +44,34 @@ def EGCD(*exprs):
         coeff, factored = Dfactors(exprs_, 0)
         nums.append(coeff)
         egcd.append(factored)
-    start = egcd[0]; factored_dict = {}
+    start = egcd[0]
     for nn, factors in enumerate(egcd):
         if not nn: continue
+        check, factored_dict, start_, cleared, r_start = False, {}, {}, False, {}
         for factor, power in factors.items():
             if factor in start:
+                cleared = True
+            elif -factor in start:
+                nums[nn], factor, cleared = - nums[nn], -factor, True
+            if cleared:
+                check = True
                 if start[factor] > power:
                     factored_dict[factor], start[factor] = power, power
                 else:
                     factored_dict[factor] = start[factor]
+            cleared = False
+        if not check:
+            return exprs_.recreate(Num(*nums).GCD())
 
-    return Num(*nums).GCD() * mul([var ** pows for var, pows in factored_dict.items()])
+        for factor, power in start.items():
+            if factor in factored_dict:
+                if len(format(factor)) == 1:
+                    start_.update({format(factor): power})
+                else:
+                    start_.update({factor: power})
+                r_start[factor] = power
+        start = r_start; r_start = {}
+    return exprs_.recreate({Num(*nums).GCD(): [{var: pows for var, pows in start.items()}]})
+
+
 

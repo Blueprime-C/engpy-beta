@@ -1,16 +1,16 @@
 from fractions import Fraction
 from math import *
-from engpy.fundamentals.primary import Num
+from engpy.fundamentals.primary import Num, break_pq
 from engpy import AI
 from engpy.AI.settings import const, configuration
-from engpy.fundamentals.secondary import pascal
+from engpy.fundamentals.secondary import pascal, group_factor, difference_powers
 from engpy.fundamentals.assorted import GCD
-from engpy.misc.gen import con, reverse, getter, startwith, th
+from engpy.misc.gen import con, reverse, getter, startwith, th, com_arrays, dict_uncommon
 from engpy.misc.gen import start_alpha_index, rev
 from engpy.misc.gen import check_rest, dstar, imap
 from engpy.errors.exceptions import *
 from engpy.errors.wreck import Fizzle
-from engpy.misc.assist import m_char, copy, deepcopy, get_exprs
+from engpy.misc.assist import m_char, copy, deepcopy, get_exprs, factor_out, num_mul
 from engpy.misc.assist import Dict, mul, Misc, join, get_den
 from engpy.misc.assist import refract, gk_en
 from engpy.misc.internals import iformat
@@ -967,10 +967,7 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
                 disp_ += f'{coeff}' if coeff != 1 else ' 1 ' if coeff == 1 and str(self_.expr[coeff][0]) == str(
                     {'': 0}) else ''
             for count, expr_ in enumerate(self_.expr[coeff]):
-                _var__ = ''
-                emb = 0
-                _disp = ''
-                coeff_ = coeff
+                _var__, emb, _disp, coeff_= '', 0, '', coeff
                 if count:
                     disp_ = ' - 1 ' if coeff == -1 and (self_.expr[coeff] == [{'': 0}] or self_.expr[coeff][count] == {
                         '': 0}) else ' + 1' if coeff == 1 and (
@@ -1312,6 +1309,14 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
         """
         return self._cal(desolve=True) if self.constants else self
 
+
+    def power_list(self, grouping=True):
+        power = []
+        for exprs in self.struct:
+            coeff, var = exprs.__extract__
+            power += [tuple(var.values())] if grouping else list(var.values())
+        return power
+
     @property
     def desolved(self):
         """
@@ -1466,141 +1471,6 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
                 S += Expr({coeff / value: [vars_]})
 
         return S
-
-    def lin_diff(self, var_='t', repeat=1, *args, **kwargs):
-        """Linear Differentiation
-
-            Differentiating Expr Objects in respect to var_
-
-            if y = 1/(x^2 + 4) find dy/dx
-
-            >>> y = Expr('1/(x^2 + 4)')
-            >>> dydx = y.lin_diff('x')
-
-            This will result to ( - 2x/(x^4 + 8x^2 + 16))
-
-
-            if u = θcos(θ)/(θ + 3), find f'(θ)
-
-            >>> u = Expr('thetacos(theta)/(theta + 3)')
-            >>> du = u.lin_diff('theta')
-
-            This will result to ((3cos(θ) - θ^2sin(θ) - 3θsin(θ))/(θ^2 + 6θ + 9))
-
-
-            For higher derivatives add the repeat argument
-
-            if  y = tan(θ), find f''(θ)
-
-            >>> y = Expr('tan(theta)')
-            >>> f2 = y.lin_diff('theta', 2)
-
-            This will result to 2sec2(θ)tan(θ)
-
-
-            If some calcalation are to be made on the differential, extra arguments
-            can be provided which will call the cal method automatically
-
-            Find the gradient of tangent to the curve y = x^2/(x^2 + 1) at the point
-            with abscissa 1.
-
-            These means we find the differential and then put x =  1
-
-            >>> y = Expr('x^2/(x^2 + 1)')
-            >>> dy = y.lin_diff('x')
-            >>> grad = dy.cal(1)
-
-            grad result to 1/2
-
-            However, we can make lin_diff method to cal itself with some extra arguments
-            the format is ExprObj.lin_diff(var, repeat, extra_arguments)
-
-            So we can  solve the above question as
-            >>> y = Expr('x^2/(x^2 + 1)')
-            >>> grad = y.lin_diff('x', 1, 1)
-
-            grad is still 1/2
-
-            if f(x) = 3a^2x^3 - 4abx^2 + 16a^2bx - 12, find the gradient of the tangent
-            to the tangent of f(x) at x = -3 when a = -5, b = 3
-
-            >>> fx = Expr('3a^2x^3 - 4abx^2 + 16a^2bx - 12')
-            >>> grad = fx.lin_diff('x',2, x = -3, a = -5, b = 3)
-
-            grad = -1,230
-
-        """
-        if not self:
-            return Expr('')
-        if not var_:
-            var_ = AI._math['working var']
-        elif var_ in greek_map:
-            var_ = greek_map[var_]
-        if isinstance(var_, list):
-            self_ = copy(self)
-            for var in var_:
-                self_ = self_.lin_diff(var)
-            return self_
-        _expr = self.new
-        for exprs in self.struct:
-            coeff, exprs_ = exprs.__extract__
-            if not len(exprs_) - 1:
-                _var = list(exprs_)[0]
-                _pow = exprs_[_var]
-                if isinstance(_var, str):
-                    if _var == chr(553):
-                        _expr += exprs * Expr(format(_pow)).lin_diff(var_)
-                    elif not isinstance(_pow, (int, float)):
-                        _expr += (_pow * f'ln({_var})').lin_diff(var_) * exprs
-
-                    elif _var == var_:
-                        _expr += Expr({coeff * _pow: [{_var: _pow - 1}]})
-                    else:
-                        _expr += Expr('')
-                else:
-                    if len(_var) == 1 and not isinstance(_pow, (int, float)):
-                        coeff_, _var_ex = _var.__extract__
-                        if coeff_ != 1 and _var_ex == {'': 0}:
-                            _expr += (_pow * f'ln({coeff_})').lin_diff(var_) * exprs
-                        elif len(_var_ex) > 1:
-                            conv_exp = {Expr(coeff_): _pow} if coeff_ != 1 else {}
-                            conv_exp.update({key: value * _pow for key, value in _var_ex.items()})
-                            _expr += Expr({coeff: [conv_exp]}).lin_diff(var_).rindex()
-                        else:
-                            _expr += exprs * (_pow * f'ln({_var})').lin_diff(var_) if not isinstance(_pow,
-                                                                                                     (int,
-                                                                                                      float)) else _var.lin_diff(
-                                var_) * Expr({coeff * _pow: [{_var: _pow - 1}]}) if getter(_var,
-                                                                                           'name') == 'Expr' else coeff * cross(
-                                (_var ** _pow).lin_diff(var_),
-                                self.recreate)
-
-                    else:
-                        _expr += exprs * (_pow * f'ln({_var})').lin_diff(var_) if not isinstance(_pow,
-                                                                                                 (int,
-                                                                                                  float)) else _var.lin_diff(
-                            var_) * Expr({coeff * _pow: [{_var: _pow - 1}]}) if getter(_var,
-                                                                                       'name') == 'Expr' else coeff * cross(
-                            (_var ** _pow).lin_diff(var_),
-                            self.recreate)
-
-            else:
-                __exprs_ = Expr({})
-                for i in range(len(exprs_)):
-                    current = {}
-                    rem = {}
-                    for count, (key, values) in enumerate(exprs_.items()):
-                        if count == i:
-                            current = {key: values}
-                        else:
-                            rem.update({key: values})
-                    __exprs_ += Expr({1: [current]}).lin_diff(var_) * Expr({1: [rem]})
-                _expr += __exprs_ * coeff
-        if not _expr.expr or _expr.expr == {}:
-            _expr.expr = {0: [{'': 0}]}
-        return (
-            _expr.simp() if not args and not kwargs else _expr.cal(*args, **kwargs)) if repeat == 1 else _expr.lin_diff(
-            var_, repeat - 1, *args, **kwargs)
 
     def lin_diff(self, var_='t', repeat=1, *args, **kwargs):
         """Linear Differentiation
@@ -2191,6 +2061,14 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
                                                                        **kwargs)) if repeat == 1 else _expr.integrate(
             var_, repeat - 1, *args, **kwargs)
 
+
+    @property
+    def figure(self):
+        for exprs in self:
+            if numable(exprs):
+                return num(exprs)
+        return False
+
     @classmethod
     def pow(cls, exprs, var=''):
         ex = 0
@@ -2204,85 +2082,68 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
         """returns the max index of a variable, raise an exception if not found except suppress is set to True"""
 
         power = self.get_powers(var)
-        if power is None and not suppress:
+        if not power and not suppress:
             raise QueryError(f'{var} is not present in {self}')
         return max(power) if isinstance(power, tuple) else power
 
+    @property
+    def cast(self):
+        return Expr({1: [{self: 1}]})
 
-    def ppowers(self, force=True, deg=False):
-        factorized = self.factorize()
-        coeff, var = factorized.__extract__
-        keep_back = {}
-        print('vvv', var)
-        for exprs, ind in var.items():
-            print('exprs', exprs)
-            if len(exprs) < 3:
-                keep_back[exprs] = ind
+
+    def ppowers(self, sep=False):
+        var_list, self_ = self.vars, self.duplicate()
+        working_vars, power, index, a , b, c, fig_used, chain_list = {}, None, {}, 1, 1, {}, False, []
+        for var in var_list:
+            powers_ = self.get_powers(var)
+            power, powers = num_mul(*powers_)
+            if power is None: continue
+            if powers == 1:
                 continue
-            f_list, cancel = {}, False
-            for exprs_ in exprs.struct:
-                print('_srpxe', exprs_)
-                _vars = exprs_.vars
-                if _vars not in f_list:
-                    f_list[_vars] = len(_vars)
-                if len(f_list) > 3:
-                    cancel = True; break
-            print(cancel,'tyybhh', f_list)
-            if not cancel:
-                f_list = [(values, keys) for keys, values in f_list.items()]
-                f_list = sorted(f_list, key=lambda: f_list[0]); aside = ''; sides = []
-                print('f_list', f_list)
-                for count1, (fs, fvars) in enumerate(f_list):
-                    if count1 == 2: continue
-                    if fs == 0:
-                        aside = fvars
-                        break
-                    brace = {}
-                    print('iijmki', fvars)
-                    for n, letters in enumerate(fvars):
-                        p_list = sorted(exprs_.get_powers(letters))
-                        print('p_list', p_list)
-                        if n == 1:
-                            coeffs = sorted([_exprs._coeff for _exprs in exprs_.struct])
-                            __mul = coeffs[1]/coeffs[0]
-                            print(power,'poof',coeffs, pascal(power))
-                            if pascal(power) != [__mul * coeffss for coeffss in coeffs]:
-                                cancel = True; break
-                        if n:
-                            lum = ''
-                            for nns in p_list:
-                                if not lum:
-                                    lum = nns; continue
-                                if nns != power * lum:
-                                    cancel = True; break
-                                else: lum = nns
-                            else:
-                                brace[letters] = min(p_list)
-                            if cancel:break
+            if powers not in index:
+                index[powers] = num(max(powers_)/power)
+            elif powers in index and index[powers] != num(max(powers_)/power):
+                continue
+            try:
+                coeff, coeff_2 = break_pq(self.coeff(f'{var}^{max(powers_)}'), index[powers])
+            except ImportError:
+                if len(working_vars) < len(index):
+                    index.pop(powers)
+                continue
+            if not powers in c: c[powers] = abs(coeff)
+            elif c[powers] != abs(coeff): continue
+            const = -1 if (powers in working_vars and self.coeff(f'{var}^{max(powers_) - power}')._coeff < 0) or coeff < 0 else 1
+            if powers in working_vars:
+                working_vars[powers][var] = (power, num(const * coeff_2 ** (1/index[powers])))
+            else:
+                working_vars[powers] = {var: (power, num(const * coeff_2 ** (1/index[powers])))}
+        for i, working_var in working_vars.items():
+            if not fig_used and len(working_var) != 2:
+                fig = self.figure
+                if list(working_var)[0][0] not in (-1, 1) and intable(abs(fig) ** (1/index[i])):
+                    working_var[num(abs(fig) ** (1/index[i]))], fig_used = (1, fig/abs(fig),), True
+                    conj = True
+            if len(working_var) == 2:
+                x, y = list(working_var)
+                p, a = working_var[x]
+                q, b = working_var[y]
+                s, a, p = '+' if b > 0 else '', '' if a == 1 else '-' if a == -1 else a, '' if p == 1 else f'^{p}'
+                b, q = '' if b == 1 else '-' if b == -1 else b, '' if q == 1 else f'^{q}'
+                expected = Expr(f'({a}{x}{p} {s} {b}{y}{q})^{index[i]}')
+                try:
+                    self_ = self_.replace(expected, strict=True)
+                    chain_list.append(Expr({c[i]: [{Expr(f'({a}{x}{p} {s} {b}{y}{q})'): index[i]}]}))
+                except QueryError:
+                    if conj:
+                        s = '+' if s == '-' else '-'
+                        expected = Expr(f'({a}{x}{p} {s} {b}{y}{q})^{index[i]}')
+                        try:
+                            self_ = self_.replace(expected, strict=True)
+                            chain_list.append(Expr({c[i]: [{Expr(f'({a}{x}{p} {s} {b}{y}{q})'): index[i]}]}))
+                        except QueryError:
+                            pass
 
-
-                        num_ = p_list[0]
-                        for count, nums in enumerate(p_list[1:]):
-                            if not count:
-                                _num = nums; continue
-                            elif count == 1:
-                                sub = nums - _num; continue
-                            if nums - _num != sub:
-                                cancel = True; break
-                        else:
-                            power = max(p_list) / sub
-                            brace[letters] = sub
-                        print(brace,'jjhj')
-                    else:
-                        sides.append(Expr({1: [brace]}))
-                        if aside:
-                            sides.append(aside ** 1/power)
-                        print('sides', sides)
-
-                keep_back[sum(sides)] = power
-                print('hgnj', keep_back)
-        return Expr({1: [keep_back]})
-
+        return (sum(chain_list) + self_) if not sep else (sum(chain_list), self_)
 
 
     @property
@@ -2293,7 +2154,7 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
             If Expr is an Expr Object, Use:
                 1. deepcopy to copy all properties and attributes; deepcopy(Expr)
                 2. copy to shallow copy the Expression only.
-                   Note that there may be discrepancied in shallow copies of nested Expr Objects. e.g hypolic like cosh objects
+                   Note that there may be discrepancies in shallow copies of nested Expr Objects. e.g hypolic like cosh objects
                    and this is because they are trig object with special attribute that identify them as
                    hyperbolic, which may not be copied; copy(Expr)
                 3. duplicate to deepcopy only the Expression; Expr.duplicate()
@@ -2305,51 +2166,41 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
         """
         return deepcopy(self, 'expr')
 
-    def factorize(self, obj=True, force=False):
-        neg = True
-        coeff = []
-        print(self, 'fgngf', self.expr, list(self.expr))
-        for coeffs in list(self.expr):
-            if coeffs > 0: neg = False
-            print(coeffs)
-            coeff.append(abs(coeffs))
-        print(coeff, 'uuk')
-        coeff = Num(*coeff).GCD()
-        coeff *= -1 if neg else 1
-        common, alls = {}, Expr({})
-        sep = True if len(self) > 2 else False
-        seps = Expr({})
-        for exprs in self.struct:
-            _coeff, var = exprs.__extract__
-            iscom = False
-            print(exprs, 'tghh', _coeff)
-            for vvs, pows in var.items():
-                print(vvs, 'thh', pows, common)
-                if not common:
-                    common = var
-                    alls += exprs
-                    break
-                if vvs in common:
-                    iscom = True
-                    pp = common[vvs]
-                    if isinstance(pp, (int, float)) and isinstance(pows, (int, float)):
-                        if pows < pp:
-                            common[vvs] = pows
+    def factorize(self, perfect=True):
+        list_expr = list(self.struct)
+        common = Expr(GCD(*list_expr))
+        if len(self) == 1: return self
+        rem_expr_ = factor_out(self, common)
+        adder, rem_expr = difference_powers(rem_expr_, sep=True)
+        adder_2 = rem_expr.ppowers(sep=True) if not isinstance(rem_expr, (int,float)) else (0, rem_expr)
+        adder += adder_2[0]; rem_expr = adder_2[1]
+        if not rem_expr: return adder
+        elif adder: return adder + rem_expr.factorize()
+        trial_1, inpart = group_factor(rem_expr, proofing=True), False
+        if trial_1:
+            if GCD(*list(trial_1.struct)) != 1:
+                new_factor = trial_1.factorize()
             else:
-                if not iscom and sep:
-                    seps += exprs / coeff
-                else:
-                    alls += exprs
-        if not common:
-            common = {'': 0}
-        factor = Expr({coeff: [common]})
-        factant = alls / factor
-        seps = seps / factor if force else seps
-        return Expr({1: [{factor: 1, factant: 1}]}) + seps if obj else ((factor, factant), seps)
+                new_factor, inpart = trial_1, True
+        else:
+            new_factor = rem_expr
+        new_factor = adder + new_factor if adder else new_factor
+        if numable(common):
+            factorized = new_factor * common
+        else:
+            coeff = common._coeff
+            if inpart or not trial_1:
+                if common != 1: new_factor = new_factor.cast
+            common /= coeff
+            factorized = common.cast if common != 1 else common
+            factorized.expr[1][0].update(new_factor.__extract__[1])
+            if '' in factorized.expr[1][0]:
+                factorized.expr[1][0].pop('')
+            factorized *= coeff
+        return factorized
 
     @classmethod
     def pow_index(cls, exprs):
-
         ex = []
         exp = cls(exprs) if isinstance(exprs, str) else exprs
         for coeff, _var in exp.expr.items():
@@ -2399,7 +2250,7 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
                 if str(var_).replace(' ', '') == str(var).replace(' ', ''):
                     pow_list.append(pows)
                     break
-        return tuple(pow_list) if pow_list else None
+        return tuple(pow_list) if pow_list else []
 
     def unify(self, strict=False):
         """
@@ -2704,6 +2555,11 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
 
         return form
 
+    def replace(self, term_1, term_2 = '', strict=False):
+        if strict and term_1 not in self:
+            raise QueryError(f'{term_1} is not in {self}')
+        return (self - term_1 + term_2).simp()
+
     def reform(self):
         """ return an equivalent Expr
 
@@ -2983,15 +2839,21 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
             other = str(other)
         truth_list = []
         other = Expr(other)
-        for others in other:
-            app = len(truth_list)
-            for exprs in self:
-                if exprs.replace(' ', '') == others.replace(' ', ''):
-                    truth_list.append(True)
-            if app == len(truth_list):
-                truth_list.append(False)
-
-        return all(truth_list)
+        self_list, done = list(self), []
+        for exprs in other.struct:
+            coeff, var = exprs.__extract__
+            if (coeff, str(var),) in done:
+                continue
+            if coeff in self.expr:
+                for dicts in self.expr[coeff]:
+                    if not dict_uncommon(var, dicts):
+                        done.append((coeff, str(var),))
+                        break
+                else:
+                    return False
+            else:
+                return False
+        return True
 
     def __abs__(self):
         """Return absolute value of a number"""
@@ -3023,9 +2885,7 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
             _var__ = ''
             frac_ = frac
             for count, expr_ in enumerate(self.expr[coeff]):
-                _disp = ''
-                _var__ = ''
-                emb = 0
+                _disp, _var__, emb = '', '', 0
                 frac = frac_
                 if count:
                     disp_ = ' - 1 ' if numm_ == -1 and (self.expr[coeff] == [{'': 0}] or self.expr[coeff][count] == {
@@ -3214,7 +3074,7 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
         if other.iscomplex and not other.isnum:
             return (self * other.conjugate) / (other * other.conjugate)
         if numable(other):
-            return Expr({coeff / num(other): alg for coeff, alg in self.expr.items()})
+            return Expr({num(coeff / num(other)): alg for coeff, alg in self.expr.items()})
         if len(other) == 1:
             if '/' in format(other):
                 coeff, var = other.__extract__
@@ -3462,6 +3322,7 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
                 return False
         return True
 
+
     def _isdivisible(self, other):
         other = Expr(other) if not isinstance(other, Expr) else other
         if not self.isdivisible(other):
@@ -3579,16 +3440,16 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
                         result *= self ** index
                     return result
 
-                if isinstance(other, (float)) and lenn:
+                if isinstance(other, float) and lenn:
                     if len(var) > 1:
                         return Expr({self._coeff ** other: [{Expr({1: [var]}): other}]})
                     pow__ = var[s_var] * other
-                    return Expr({self._coeff ** other: [{s_var: pow__}]})
+                    return Expr({num(self._coeff ** other): [{s_var: pow__}]})
 
                 return Expr({1: [{self: other}]})
 
         if lenn:
-            pow__ = var[list(var)[0]] * other
+            pow__ = var[s_var] * other
             if getter(s_var, 'name') and intable(pow__) and len(var) == 1:
                 return Expr(coeff ** other * s_var ** pow__)
         self_ = copy(self)
@@ -3604,6 +3465,69 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
             other = Expr(f'{other}')
         a, b = alnum(self), alnum(other)
         return str(self) < str(other) if not isinstance(a, (int, float)) or not isinstance(a, (int, float)) else a < b
+
+    def common(self, *exprs):
+        common_list = []
+        for expr in self.struct:
+            for expr_ in exprs:
+                if expr not in expr_:
+                    break
+            else:
+                common_list.append(expr)
+        return sum(common_list)
+
+    def equate(self, expr):
+        if not isinstance(expr, Expr):
+            raise UnacceptableToken(f'{expr} must be a Expr Obj not {type(expr)}')
+        working_set, values = com_arrays(self.vars, expr.vars), {}
+        self_, expr_ = self, expr
+        while True:
+            reload = copy(values)
+            for var in com_arrays(self.vars, expr.vars):
+                common_ = self_.common(expr_)
+                self_, expr_ = (self_ - common_).simp(), (expr_ - common_).simp()
+                if var in str(self_.power_list()) and var in str(expr_.power_list()):
+                    from engpy.misc.fragments import fragment_1
+                    power_1, power_2 = fragment_1(self_, var), fragment_1(expr_, var)
+                    try:
+                        if power_1[1] != power_2[1] or '-' in f'{power_1[0] * power_2[0]}':
+                            raise Exception
+                        new_expr = power_1[0] - power_2[0]
+                        values[new_expr.vars[0]] = new_expr.solved()
+                        working_set.remove(new_expr.vars[0])
+                        continue
+                    except Exception:
+                        pass
+
+                power_1, power_2 = self_.get_powers(var), expr_.get_powers(var)
+                condition_1 = len(power_1) == len(power_2) == 1
+                condition_2 = not(numable(power_1[0]) and numable(power_2[0])) if condition_1 else False
+                condition_3 = self_.coeff(f'{var}^{power_1[0]}') == expr_.coeff(f'{var}^{power_2[0]}') if condition_2 else False
+                if condition_3:
+                    new_expr = power_1[0] - power_2[0]
+                    values[new_expr.vars[0]] = new_expr.solved()
+                    continue
+                power, power_2 = set(power_1), set(power_2); power = power.union(power_2)
+                for powers in power:
+                    try:
+                        new_expr = self_.coeff(f'{var}^{powers}') - expr_.coeff(f'{var}^{powers}')
+                        values[new_expr.vars[0]] = new_expr.solved()
+                    except Exception:
+                        pass
+
+            if reload != values:
+                self_, expr_ = self.cal(**values), expr.cal(**values)
+                common_ = self_.common(expr_)
+                self_, expr_ = (self_ - common_).simp(), (expr_ - common_).simp()
+            if not working_set or reload == values:
+                try:
+                    new_expr = self_ - expr_
+                    values[new_expr.vars[0]] = new_expr.solved()
+                    working_set.remove(new_expr.vars[0])
+                except Exception:
+                    pass
+                break
+        return values
 
     def __gt__(self, other):
         if not isinstance(other, (Expr, int, float)):
