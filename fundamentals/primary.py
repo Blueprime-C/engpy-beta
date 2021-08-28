@@ -1,7 +1,7 @@
 from math import factorial
-from engpy.errors.exceptions import InvalidOperation, UnacceptableToken
-from engpy.misc.abilities import intable, roundnumable
-from engpy.misc.miscs import num, roundnum
+from errors.exceptions import InvalidOperation, UnacceptableToken
+from misc.abilities import intable, roundnumable
+from misc.miscs import num, roundnum
 
 
 class Num:

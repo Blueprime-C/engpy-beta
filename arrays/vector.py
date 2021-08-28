@@ -1,19 +1,19 @@
 """This module implements and provides Vector Operation to engpy"""
 import math
 from operator import mul, add
-from engpy.errors.exceptions import *
-from engpy.errors.warnings import warn
-from engpy.arrays import Matrix_
-from engpy.interface import Var
-from engpy.interface import _complex, zero
-from engpy.interface import arccos
-from engpy.misc.assist import getter
-from engpy.misc.gen import check_rest
-from engpy.oblects.abc import BaseClass
+from errors.exceptions import *
+from errors.warnings import warn
+from arrays import Matrix_
+from interface import Var
+from interface import _complex, zero
+from interface import arccos
+from misc.assist import getter
+from misc.gen import check_rest
+from oblects.abc import BaseClass
 
 _complex()
 
-from engpy.interface import i, j, k, _i, _j, _k
+from interface import i, j, k, _i, _j, _k
 component = [_i, _j, _k]
 
 

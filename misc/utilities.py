@@ -1,7 +1,7 @@
-from engpy.misc.gen import start_alpha_index
-from engpy.misc.miscs import num, alnum
-from engpy.misc.abilities import numable
-from engpy.misc.gen import getter
+from misc.gen import start_alpha_index
+from misc.miscs import num, alnum
+from misc.abilities import numable
+from misc.gen import getter
 
 
 class iter2:

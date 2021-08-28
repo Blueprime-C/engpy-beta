@@ -1,12 +1,12 @@
-from engpy.misc.gen import getter
-from engpy.misc.utilities import iter2, iter1, mat_iter, element, mat_iter_col
+from misc.gen import getter
+from misc.utilities import iter2, iter1, mat_iter, element, mat_iter_col
 from abc import ABCMeta, abstractmethod
 from copy import copy, deepcopy
-from engpy.fundamentals.primary import Num
-from engpy.misc.miscs import num
-from engpy.misc.assist import deepcopy
-from engpy.errors.exceptions import *
-from engpy.errors.wreck import Fizzle
+from fundamentals.primary import Num
+from misc.miscs import num
+from misc.assist import deepcopy
+from errors.exceptions import *
+from errors.wreck import Fizzle
 
 
 class BaseClass(object):

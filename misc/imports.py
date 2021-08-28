@@ -1,4 +1,4 @@
-from engpy.errors.exceptions import UnacceptableToken
+from errors.exceptions import UnacceptableToken
 
 
 def create(obj):

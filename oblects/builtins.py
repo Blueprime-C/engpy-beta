@@ -1,1 +1,1 @@
-from engpy.oblects.builtins import _isinstance as isinstance
+from oblects.builtins import _isinstance as isinstance

@@ -1,15 +1,15 @@
-from engpy.misc.abilities import numable
-from engpy.misc.miscs import num
-from engpy.errors.exceptions import OperationNotAllowed
+from misc.abilities import numable
+from misc.miscs import num
+from errors.exceptions import OperationNotAllowed
 
 from .primary import break_pq, count_powers
 
 from .assorted import C, CD, GCD
-from engpy.misc.imports import create
-from engpy.misc.abilities import intable
-from engpy.Standard import stdlib
-from engpy.Standard.stdlib import Numbers
-from engpy.misc.internals import check_coeff_ind, unnest
+from misc.imports import create
+from misc.abilities import intable
+from Standard import stdlib
+from Standard.stdlib import Numbers
+from misc.internals import check_coeff_ind, unnest
 
 
 def pascal(index):

@@ -1,6 +1,6 @@
 import json
 import math
-from engpy.path import base
+from path import base
 
 try:
     with open(f'{base}/AI/engpy.config','r') as config:
@@ -8,8 +8,10 @@ try:
 except Exception:
     configuration = {}
 
+
 def trig_index_simp():
     return configuration['math']['simp']['trig'][0]['index_simp']
+
 
 class Math:
     def __new__(cls):
@@ -31,6 +33,7 @@ class Math:
 
     def __getitem__(self,other):
         return configuration['math'][other]
+
 
 class Bank:
     def __init__(self):
@@ -62,6 +65,7 @@ class Bank:
         configuration['bank'][other] = value
         self.change_state
 
+
 class Eng:
     def __new__(cls):
         if 'eng' not in configuration:
@@ -75,11 +79,13 @@ class Eng:
         with open(f'{base}/AI/engpy.config','w+') as config:
             json.dump(configuration, config, indent = 4)
             
-    def __add__(self,rule):
+    def __add__(self, rule):
         configuration['eng'].update(rule)
         self.change_state
-    def __getitem__(self,other):
+
+    def __getitem__(self, other):
         return configuration['eng'][other]
+
 
 _math = Math()
 eng = Eng()

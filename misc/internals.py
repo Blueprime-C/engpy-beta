@@ -1,5 +1,5 @@
-from engpy.fundamentals.assorted import GCD
-from engpy.misc.assist import getter
+from fundamentals.assorted import GCD
+from misc.assist import getter
 
 
 def iformat(self):

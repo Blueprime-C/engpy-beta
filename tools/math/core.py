@@ -1,23 +1,36 @@
 from copy import copy, deepcopy
-import engpy.tools.exprs as exprs
-from engpy.AI import _math
-from engpy.oblects.abc import Utilities, UtilityClass
-from engpy.oblects.abc import BaseClass, ExpressionObjectClass
-from engpy.oblects.abc import BasicOperatorsClassABC
-from engpy.misc.miscs import num, alnum, counternum
-from engpy.misc.gen import con, rev, reverse, getter
-from engpy.misc.assist import cd2str, d2lst, join, arrange_, m_char
-from engpy.misc.assist import copy, deepcopy, get_exprs
-from engpy.misc.miscs import simp_var
-from engpy.misc.vars import alpha
-from engpy.misc.abilities import numable, intable
-from engpy.errors.exceptions import *
+import tools.exprs as exprs
+from AI import _math
+from oblects.abc import (
+     Utilities,
+     UtilityClass,
+     BaseClass,
+     ExpressionObjectClass,
+     BasicOperatorsClassABC
+)
+from misc.miscs import num, alnum, counternum, simp_var
+from misc.gen import con, rev, reverse, getter
+from misc.assist import (
+    cd2str,
+    d2lst,
+    join,
+    arrange_,
+    m_char,
+    copy,
+    deepcopy,
+    get_exprs
+)
+from misc.vars import alpha
+from misc.abilities import numable, intable
+from errors.exceptions import *
 import math as mth
 
 e = 2.718281828459045
+
+
 class Log(BaseClass):
 
-    def __init__(self, arg=0, base=10, coeff=1, hkeys = '', s=False):
+    def __init__(self, arg=0, base=10, coeff=1, hkeys='', s=False):
         self.s = s
         self.name = 'Log'
         if isinstance(arg, dict):

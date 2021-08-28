@@ -1,8 +1,8 @@
-from engpy.tools.exprs import Expr
-from engpy.misc.assist import deepcopy
-from engpy.errors.exceptions import *
-from engpy.misc.gen import getter
-from engpy.misc.miscs import num
+from tools.exprs import Expr
+from misc.assist import deepcopy
+from errors.exceptions import *
+from misc.gen import getter
+from misc.miscs import num
 
 
 class base:

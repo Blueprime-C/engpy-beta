@@ -1,6 +1,6 @@
 from .primary import Num
-from engpy.misc.assist import getter, mul, copy
-from engpy.errors.exceptions import UnacceptableToken, OperationNotAllowed
+from misc.assist import getter, mul, copy
+from errors.exceptions import UnacceptableToken, OperationNotAllowed
 
 
 def efactors(exprs):

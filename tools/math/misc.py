@@ -1,8 +1,10 @@
-from engpy.misc.scan.scan_expr import scan_MD
-from engpy.errors.exceptions import *
-import engpy.tools.exprs as expa
-from engpy.misc.assist import pr_rt
+from misc.scan.scan_expr import scan_MD
+from errors.exceptions import *
+import tools.exprs as expa
+from misc.assist import pr_rt
 from copy import copy
+
+
 class surd:
     def __init__(self,exprs):
          if not 'sqrt' in exprs:

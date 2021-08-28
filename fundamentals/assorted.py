@@ -1,5 +1,5 @@
 from math import factorial
-from engpy.misc.assist import getter
+from misc.assist import getter
 from .primary import Num
 
 
