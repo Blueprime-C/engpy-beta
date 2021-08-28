@@ -1,7 +1,7 @@
-from engpy.tools.exprs import Expr
-from engpy.tools.math import trigs, core
-from engpy.errors.exceptions import *
-from engpy.misc.gen import getter
+from tools.exprs import Expr
+from tools.math import trigs, core
+from errors.exceptions import *
+from misc.gen import getter
 
 
 def Var(*var):

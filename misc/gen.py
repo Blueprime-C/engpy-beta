@@ -2,7 +2,7 @@ from fractions import Fraction
 
 
 def whole(lst):
-    from engpy.fundamentals.primary import Num
+    from fundamentals.primary import Num
     den = Num(*[Fraction(lsts).limit_denominator().denominator for lsts in lst]).LCM()
     return [lsts * den for lsts in lst]
 

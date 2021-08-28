@@ -1,6 +1,6 @@
-from engpy.AI import Bank
-from engpy.misc.assist import getter
-from engpy.errors.exceptions import UnacceptableToken, Vague
+from AI import Bank
+from misc.assist import getter
+from errors.exceptions import UnacceptableToken, Vague
 
 class Article:
     def __addKnowledge__(self, items):

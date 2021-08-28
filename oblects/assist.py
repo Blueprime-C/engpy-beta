@@ -1,8 +1,8 @@
-from engpy.misc.assist import getter
-from engpy.misc.miscs import alnum
-from engpy.errors.exceptions import *
-from engpy.misc.abilities import numable
-from engpy.fundamentals.assorted import CD
+from misc.assist import getter
+from misc.miscs import alnum
+from errors.exceptions import *
+from misc.abilities import numable
+from fundamentals.assorted import CD
 
 
 def New_Raph(self,var):

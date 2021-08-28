@@ -1,7 +1,7 @@
-from engpy.misc.abilities import numable
-from engpy.misc.miscs import alnum
-from engpy.misc.miscs import num
-from engpy.misc.gen import getter
+from misc.abilities import numable
+from misc.miscs import alnum
+from misc.miscs import num
+from misc.gen import getter
 
 def ztrns(zt, in_var = 'k', out_var = 'z'):
     

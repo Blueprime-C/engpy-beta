@@ -1,5 +1,5 @@
-from engpy.errors.exceptions import UnacceptableToken
-from engpy.misc.assist import getter
+from errors.exceptions import UnacceptableToken
+from misc.assist import getter
 
 
 def abs_(expr):

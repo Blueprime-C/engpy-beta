@@ -1,8 +1,8 @@
-import engpy.tools.exprs as Ex
-import engpy.tools.math.core as core
-import engpy.tools.math.trigs as trigs
+import tools.exprs as Ex
+import tools.math.core as core
+import tools.math.trigs as trigs
 from .gen import getter
-from engpy.errors.exceptions import UnacceptableToken
+from errors.exceptions import UnacceptableToken
 
 
 def toClass(expr, hkeys = ''):

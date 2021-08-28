@@ -1,7 +1,7 @@
-from engpy.lib.SS import series
-from engpy.errors.exceptions import *
-from engpy.misc.assist import List
-from engpy.misc.gen import getter
+from lib.SS import series
+from errors.exceptions import *
+from misc.assist import List
+from misc.gen import getter
 
 
 class Progression(series.base):

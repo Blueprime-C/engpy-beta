@@ -2,8 +2,8 @@ from . import alpha, _alpha
 from .abilities import numable, counterable
 from .gen import getter
 from math import e
-from engpy.errors.exceptions import InvalidOperation, UnacceptableToken
-from engpy.errors.wreck import Fizzle
+from errors.exceptions import InvalidOperation, UnacceptableToken
+from errors.wreck import Fizzle
 
 
 def num(num_):

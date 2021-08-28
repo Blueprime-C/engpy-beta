@@ -1,10 +1,15 @@
-from engpy.misc.vars import greeks, _alpha
-from engpy.misc.assist import get_exprs
-predefined_keywords = ['cos','sin',
-                               'tan','cosh',
-                               'sinh','e','^'
-                               ,'log','sec'
-                               ,'cosec','cot'] + greeks
+from misc.vars import greeks, _alpha
+from misc.assist import get_exprs
+
+
+predefined_keywords = ['cos', 'sin',
+                        'tan', 'cosh',
+                        'sinh', 'e', '^',
+                        'log', 'sec',
+                        'cosec', 'cot'
+                       ] + greeks
+
+
 def get_key_word(string):
     n = 0; key_w = [];sub = ''
     while  n < len(string):
@@ -71,6 +76,7 @@ def score(string, exprs):
             res -= 2 + len(rule_list[i])
     return res
 
+
 def guage(string):
     prev = ''
     res = 0; add = 0; string = string.replace(' ',''); brac = 0
@@ -82,6 +88,7 @@ def guage(string):
         add += 1
         res += add
     return res
-        
+
+
 def weight(string,exprs):
     return guage(string)/score(exprs)

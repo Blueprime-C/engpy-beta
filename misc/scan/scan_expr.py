@@ -1,5 +1,7 @@
-from engpy.misc.assist import get_exprs
-def scan_MD(expr,sign = '',std = '', state = ''):
+from misc.assist import get_exprs
+
+
+def scan_MD(expr, sign='', std='', state=''):
     if not sign:
         sign = '*'
     if sign not in expr:

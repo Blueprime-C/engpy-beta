@@ -2,11 +2,11 @@ from .settings import _math
 from .settings import eng
 from .settings import Bank
 from .helpers import get_key_word, score, guage
-from engpy.misc.assist import match_curly, getter
-from engpy.misc.utilities import rep_coeff
-from engpy.misc.abilities import numable
-from engpy.misc.vars import greeks, _alpha, chars
-from engpy.errors.exceptions import *
+from misc.assist import match_curly, getter
+from misc.utilities import rep_coeff
+from misc.abilities import numable
+from misc.vars import greeks, _alpha, chars
+from errors.exceptions import *
 from operator import itemgetter
 from copy import deepcopy, copy
 

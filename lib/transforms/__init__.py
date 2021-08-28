@@ -1,6 +1,6 @@
-from engpy.lib.transforms.laplace import laplace
-from engpy.errors.exceptions import UnacceptableToken
-from engpy.misc.gen import getter
+from lib.transforms.laplace import laplace
+from errors.exceptions import UnacceptableToken
+from misc.gen import getter
 #from .various import progressions
 
 

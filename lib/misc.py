@@ -1,6 +1,6 @@
-from engpy.lib.SS import series
-from engpy.misc.assist import List, getter, join
-import  engpy.misc.tables as tables
+from lib.SS import series
+from misc.assist import List, getter, join
+import misc.tables as tables
 
 
 class interpolate:

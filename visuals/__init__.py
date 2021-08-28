@@ -1,12 +1,12 @@
 from matplotlib import pyplot as plt
 from matplotlib import style
-from engpy.misc.miscs import nums, alnums
-from engpy.misc.vars import greek_map, alpha
+from misc.miscs import nums, alnums
+from misc.vars import greek_map, alpha
 
 
 class Visualize:
     
-    def __init__(self,var, obj = '', color = 'g',sec = '', linewidth = 2, *args, **kwargs):
+    def __init__(self, var, obj='', color='g', sec='', linewidth=2, *args, **kwargs):
         self.color = color if color else alpha
         self.linewidth = linewidth
         self.var = var

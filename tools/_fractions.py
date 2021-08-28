@@ -1,10 +1,10 @@
-import engpy.tools.exprs as exprs
-from engpy.misc.abilities import numable
-from engpy.misc.miscs import _isinstance
-from engpy.misc.gen import getter
-from engpy.misc.scan.scan_expr import scan_MD
-from engpy.misc.assist import get_den, get_num
-from engpy.errors.exceptions import *
+import tools.exprs as exprs
+from misc.abilities import numable
+from misc.miscs import _isinstance
+from misc.gen import getter
+from misc.scan.scan_expr import scan_MD
+from misc.assist import get_den, get_num
+from errors.exceptions import *
 from copy import copy, deepcopy
 
 class Fraction:

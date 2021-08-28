@@ -1,43 +1,41 @@
+import AI
 from fractions import Fraction
 from math import *
-from engpy.fundamentals.primary import Num, break_pq
-from engpy import AI
-from engpy.AI.settings import const, configuration
-from engpy.fundamentals.secondary import pascal, group_factor, difference_powers
-from engpy.fundamentals.assorted import GCD
-from engpy.misc.gen import con, reverse, getter, startwith, th, com_arrays, dict_uncommon
-from engpy.misc.gen import start_alpha_index, rev
-from engpy.misc.gen import check_rest, dstar, imap
-from engpy.errors.exceptions import *
-from engpy.errors.wreck import Fizzle
-from engpy.misc.assist import m_char, copy, deepcopy, get_exprs, factor_out, num_mul
-from engpy.misc.assist import Dict, mul, Misc, join, get_den
-from engpy.misc.assist import refract, gk_en
-from engpy.misc.internals import iformat
-from engpy.misc.abilities import intable, intable_, numable
-from engpy.misc.scan.scan_expr import scan_MD
-from engpy.misc.vars import alpha_greek as alpha
-from engpy.misc.vars import greek_map, constants
-from engpy.misc.vars import chars
-from engpy.misc.helpers import toClass, cross, Mul
-from engpy.misc.miscs import num, alnum, numity
-from engpy.lib.transforms import Transforms
-from engpy.oblects.abc import Utilities, UtilityClass
-from engpy.oblects.abc import ExpressionObjectClass
-from engpy.oblects.abc import BasicOperatorsClassABC
-from engpy.oblects.cls import mix
-from engpy.oblects.assist import New_Raph, modified_New_Raph
-from engpy.oblects.KnowledgeBase import Article
-from engpy.visuals import Visualize
-from engpy.misc.utilities import Range
-from engpy.tools._fractions import Fraction as Frac
-import engpy.misc.helpers as help_
+from fundamentals.primary import Num, break_pq
+from AI.settings import const, configuration
+from fundamentals.secondary import pascal, group_factor, difference_powers
+from fundamentals.assorted import GCD
+from misc.gen import con, reverse, getter, startwith, th, com_arrays, dict_uncommon
+from misc.gen import start_alpha_index, rev
+from misc.gen import check_rest, dstar, imap
+from errors.exceptions import *
+from errors.wreck import Fizzle
+from misc.assist import m_char, copy, deepcopy, get_exprs, factor_out, num_mul
+from misc.assist import Dict, mul, Misc, join, get_den
+from misc.assist import refract, gk_en
+from misc.internals import iformat
+from misc.abilities import intable, intable_, numable
+from misc.scan.scan_expr import scan_MD
+from misc.vars import alpha_greek as alpha
+from misc.vars import greek_map, constants
+from misc.vars import chars
+from misc.helpers import toClass, cross, Mul
+from misc.miscs import num, alnum, numity
+from lib.transforms import Transforms
+from oblects.abc import Utilities, UtilityClass, ExpressionObjectClass, BasicOperatorsClassABC
+from oblects.cls import mix
+from oblects.assist import New_Raph, modified_New_Raph
+from oblects.KnowledgeBase import Article
+from visuals import Visualize
+from misc.utilities import Range
+from tools._fractions import Fraction as Frac
+import misc.helpers as help_
 import random
 
 try:
     from numpy import int32
 except (ImportError, OSError) as e:
-    from engpy.misc.omissions import Nothing
+    from misc.omissions import Nothing
     int32 = Nothing
 
 __all__ = ['Expr', 'Eqns']
@@ -4161,7 +4159,7 @@ class Eqn:
 
 
 class Eqns(ExpressionObjectClass):
-    import engpy.arrays.matrix as arm
+    import arrays.matrix as arm
     def __init__(self, *expr, norm=False, segregate=False):
         self.name = 'Eqns'
         self.list = []

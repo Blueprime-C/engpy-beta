@@ -4,7 +4,7 @@ from .miscs import num, counternum
 from .vars import alpha, greek_map
 from .gen import startwith, con_, _con, getter, rev
 from .abilities import numable
-from engpy.errors.exceptions import *
+from errors.exceptions import *
 
 
 def wrap(char,char_space):

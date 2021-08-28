@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
-class AI(mataclass = ABCMeta):
+
+class AI(mataclass=ABCMeta):
     class Implementation:
     
         @abstractmethod

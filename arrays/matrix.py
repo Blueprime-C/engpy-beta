@@ -3,26 +3,24 @@ from fractions import Fraction
 from math import *
 from operator import add,sub, mul
 from copy import copy,deepcopy
-from engpy.tools.exprs import Expr,Es,Eqn, Eqns
-from engpy.errors.exceptions import *
-from engpy.errors.wreck import Fizzle
-from engpy.fundamentals.primary import Num
-from engpy.misc.gen import whole, com_arrays, com_arr_str
-from engpy.misc.gen import imap
-from engpy.misc.assist import getter
-from engpy.misc.tables import D2_ord
-from engpy.misc.abilities import intable
-from engpy.misc.vars import alpha
-from engpy.misc.miscs import simp_var, num, lexpr, fnum
-from engpy.oblects.abc import MatrixObjectClass, Utilities, StaticStates
+from tools.exprs import Expr,Es,Eqn, Eqns
+from errors.exceptions import *
+from errors.wreck import Fizzle
+from fundamentals.primary import Num
+from misc.gen import whole, com_arrays, com_arr_str, imap
+from misc.assist import getter
+from misc.tables import D2_ord
+from misc.abilities import intable
+from misc.vars import alpha
+from misc.miscs import simp_var, num, lexpr, fnum
+from oblects.abc import MatrixObjectClass, Utilities, StaticStates
 try:
     from numpy import array,ndarray
 except ImportError:
     class ndarray:
         pass
     
-from engpy.oblects.states import *
-
+from oblects.states import *
 
 
 class Matrix(MatrixObjectClass, Utilities.matrix, StaticStates):

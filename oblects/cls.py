@@ -1,5 +1,5 @@
-from engpy.misc.gen import getter
-from engpy.errors.exceptions import UnacceptableToken
+from misc.gen import getter
+from errors.exceptions import UnacceptableToken
 
 def mix(exprs):
     if not isinstance(exprs,(list, tuple)):

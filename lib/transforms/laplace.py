@@ -1,7 +1,7 @@
-from engpy.misc.abilities import numable
-from engpy.misc.miscs import num
-from engpy.misc.gen import getter
-from engpy.misc.vars import greek_map
+from misc.abilities import numable
+from misc.miscs import num
+from misc.gen import getter
+from misc.vars import greek_map
 
 
 def laplace(expres, in_var='t', out_var='s'):
