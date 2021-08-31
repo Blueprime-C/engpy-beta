@@ -5,6 +5,7 @@ from .vars import alpha, greek_map
 from .gen import startwith, con_, _con, getter, rev
 from .abilities import numable
 from errors.exceptions import *
+from concurrent.futures import ProcessPoolExecutor
 
 
 def wrap(char,char_space):
@@ -356,3 +357,12 @@ def num_mul(*nums):
         i += 1
     sus_1, sus_2 = list(sus), list(sus.values())
     return sus_1[sus_2.index(max(sus_2))], max(sus_2) + 1
+
+
+def replacer(string, *sub_strings):
+
+    for strings in sub_strings:
+        string = string.replace(strings, '')
+
+    return string
+

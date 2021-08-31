@@ -10,7 +10,7 @@ from misc.gen import start_alpha_index, rev
 from misc.gen import check_rest, dstar, imap
 from errors.exceptions import *
 from errors.wreck import Fizzle
-from misc.assist import m_char, copy, deepcopy, get_exprs, factor_out, num_mul
+from misc.assist import m_char, copy, deepcopy, get_exprs, factor_out, num_mul, replacer
 from misc.assist import Dict, mul, Misc, join, get_den
 from misc.assist import refract, gk_en
 from misc.internals import iformat
@@ -1979,25 +1979,18 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
             const, integrand, _mul_ = {}, {}, Expr({1: [{'': 0}]})
             print(expr_, 'sef')
             for var_, pow_ in _var.items():
-                if var in format(var_).replace('sin',
-                        '').replace('cos',
-                                      '').replace('tan',
-                                                  '').replace('cosec',
-                                                              '').replace('sec',
-                                                                          '').replace('log',
-                                                                                      '').replace('ln',
-                                                                                                  '').replace('cot',
-                                                                                                              '') or (
-                        not isinstance(pow_,
-                                       (int, float)) and var in format(pow_).replace('sin',
-                    '').replace('cos',
-                                  '').replace('tan',
-                                              '').replace('cosec',
-                                                          '').replace('sec',
-                                                                      '').replace('log',
-                                                                                  '').replace('ln',
-                                                                                              '').replace('cot',
-                                                                                                          '')):
+                if var in replacer(
+                        format(var_),
+                        'sin', 'cos', 'tan',
+                        'cosec', 'sec', 'log',
+                        'ln', 'cot'
+                        ) or (not isinstance(pow_, (int, float)) and var in replacer(
+                                                                            format(pow_),
+                                                                            'sin', 'cos', 'tan',
+                                                                            'cosec', 'sec', 'log',
+                                                                            'ln', 'cot'
+                                                                            )
+                ):
                     integrand[var_] = pow_
                 else:
                     const[var_] = pow_
