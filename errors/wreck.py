@@ -1,2 +1,0 @@
-class Fizzle(Exception):
-    pass
