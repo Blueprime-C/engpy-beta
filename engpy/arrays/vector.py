@@ -13,7 +13,7 @@ from engpy.oblects.abc import BaseClass
 
 _complex()
 
-from interface import i, j, k, _i, _j, _k
+from engpy.interface import i, j, k, _i, _j, _k
 component = [_i, _j, _k]
 
 

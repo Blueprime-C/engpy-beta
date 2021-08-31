@@ -1,16 +1,16 @@
 from copy import copy, deepcopy
-import tools.exprs as exprs
-from AI import _math
-from oblects.abc import (
+import engpy.tools.exprs as exprs
+from engpy.AI import _math
+from engpy.oblects.abc import (
      Utilities,
      UtilityClass,
      BaseClass,
      ExpressionObjectClass,
      BasicOperatorsClassABC
 )
-from misc.miscs import num, alnum, counternum, simp_var
-from misc.gen import con, rev, reverse, getter
-from misc.assist import (
+from engpy.misc.miscs import num, alnum, counternum, simp_var
+from engpy.misc.gen import con, rev, reverse, getter
+from engpy.misc.assist import (
     cd2str,
     d2lst,
     join,
@@ -20,9 +20,9 @@ from misc.assist import (
     deepcopy,
     get_exprs
 )
-from misc.vars import alpha
-from misc.abilities import numable, intable
-from errors.exceptions import *
+from engpy.misc.vars import alpha
+from engpy.misc.abilities import numable, intable
+from engpy.errors.exceptions import *
 import math as mth
 
 e = 2.718281828459045

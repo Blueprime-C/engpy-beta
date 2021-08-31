@@ -1,7 +1,7 @@
-from tools.exprs import Expr
-from tools.math import trigs, core
-from errors.exceptions import *
-from misc.gen import getter
+from .tools.exprs import Expr
+from .tools.math import trigs, core
+from .errors.exceptions import *
+from .misc.gen import getter
 
 
 def Var(*var):

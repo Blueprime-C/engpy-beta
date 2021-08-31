@@ -366,3 +366,29 @@ def replacer(string, *sub_strings):
 
     return string
 
+
+def converge(cls, coeff, var):
+    return cls({coeff: [var]})
+
+
+def nest(expr, cvg=False, *args):
+    if cvg:
+        expr = expr.form()({1: [{expr: 1}]})
+    coeff, var = expr.__extract__
+    for arg in args:
+        if getter(arg, 'name') != 'Expr':
+            raise UnacceptableToken(f'{arg} is not a valid Expr Object')
+        coeff_, var_ = arg.__extract__
+        coeff *= coeff_
+        var.update(var_)
+
+    return converge(expr.form(), coeff, var)
+
+
+def number_generator(context=''):
+    count = 0
+    while True:
+        if context and count in context:
+            count += 1
+            continue
+        yield count

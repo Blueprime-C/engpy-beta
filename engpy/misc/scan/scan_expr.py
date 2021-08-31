@@ -1,4 +1,4 @@
-from misc.assist import get_exprs
+from ..assist import get_exprs
 
 
 def scan_MD(expr, sign='', std='', state=''):

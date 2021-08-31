@@ -3,12 +3,15 @@ from engpy.misc.abilities import numable
 from engpy.misc.miscs import _isinstance
 from engpy.misc.gen import getter
 from engpy.misc.scan.scan_expr import scan_MD
-from engpy.misc.assist import get_den, get_num
+from engpy.misc.assist import get_den, get_num, number_generator
 from engpy.errors.exceptions import *
 from copy import copy, deepcopy
 
+from engpy.misc.vars import variable_generator
+
+
 class Fraction:
-    def __init__(self,num,den = ''):
+    def __init__(self, num, den = ''):
         self.name = 'Fraction'
         if isinstance(num,list):
             self.num, self.den = num
@@ -63,8 +66,7 @@ class Fraction:
                     return copy(self)
                 den2 = 1;
         else: den2 = other.den; num2 = other.num
-        self_ = self
-        pas = False
+        self_, pas = self, False
         den1, num1 = self_.den, self_.num
         if den2 != 1:
             if num1.isdivisible(den2):
@@ -106,6 +108,42 @@ class Fraction:
         return copy(self)
 
         
+    def partial(self):
+        new_den = self.den.factorize(level=1)
+        print(format(new_den))
+        try:
+            coeff, products = new_den.__extract__
+            var_list, var_gen, working_vars = self.vars, variable_generator(self.vars), []
+            partials, variable = self.den.new, self.vars[0]
+            print(products,'ggbbrg')
+            for var, index in products.items():
+                print(format(partials),'hdth')
+                if index == 1:
+                    sub_expr = self.den.new
+                    for i in range(var.deg):
+                        sub_expr_var = f'{variable}^{i}' if i else ''
+                        sub_expr += next(var_gen) + sub_expr_var
+                    partials += sub_expr / self.den.form()({1: [{var: index}]})
+                    continue
+
+                for i in range(index):
+                    product = self.den.form()({1: [{var: i + 1}]})
+                    partials += next(var_gen) / product
+
+        except OperationNotAllowed:
+            return self
+        from engpy.tools.exprs import Eqns, Eqn
+        equations, number_gen = Eqns(), number_generator()
+        for i in range(len(products)):
+            while True:
+                try:
+                    value = next(number_gen)
+                    equations.add(Eqn(partials.cal(**{variable: value}), self.cal({variable: value})))
+                    break
+                except (ZeroDivisionError, InvalidOperation) as e:
+                    pass
+        print(equations)
+        return self.cal(equations.solve())
 
     @property
     def vars(self):
@@ -124,8 +162,8 @@ class Fraction:
     def __len__(self):
         return 2
     
-    def cal(self,values, desolve = '', desolved = False):
-        return self.num.cal(values, desolve = desolve, desolved = desolved)/self.den.cal(values, desolve = desolve, desolved = desolved)
+    def cal(self, values, desolve='', desolved=False):
+        return self.num.cal(values, desolve=desolve, desolved=desolved)/self.den.cal(values, desolve=desolve, desolved=desolved)
     
     def __add__(self, other):
         
@@ -248,17 +286,15 @@ class Fraction:
 
     def __rmul__(self, other):
         return self * exprs.Expr(other)
+
     def __radd__(self, other):
         other = exprs.Expr(str(other))
         return self + other
+
     def __rsub__(self, other):
         other = exprs.Expr(str(other))
         return self - other
 
     def __round__(self, fix):
         return Fraction(round(self.num,fix), round(self.den, fix))
-        
-    
-
-        
         

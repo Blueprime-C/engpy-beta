@@ -1,6 +1,6 @@
 import json
 import math
-from path import base
+from ..path import base
 
 try:
     with open(f'{base}/AI/engpy.config','r') as config:
