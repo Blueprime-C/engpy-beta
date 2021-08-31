@@ -1,17 +1,17 @@
-import tools.math as math
-import tools.exprs as exprs
-from misc.miscs import num,alnum,counternum
-from AI import _math
-from oblects.abc import Utilities, UtilityClass
-from oblects.abc import ExpressionObjectClass
-from oblects.abc import BasicOperatorsClassABC
-from misc.gen import con_,rev, reverse,getter
-from misc.assist import cd2str, d2lst,join,arrange,m_char
-from misc.assist import copy,deepcopy,get_exprs
-from misc.miscs import simp_var
-from misc.vars import alpha
-from misc.abilities import numable,intable
-from errors.exceptions import *
+import engpy.tools.math as math
+import engpy.tools.exprs as exprs
+from engpy.misc.miscs import num,alnum,counternum
+from engpy.AI import _math
+from engpy.oblects.abc import Utilities, UtilityClass
+from engpy.oblects.abc import ExpressionObjectClass
+from engpy.oblects.abc import BasicOperatorsClassABC
+from engpy.misc.gen import con_,rev, reverse,getter
+from engpy.misc.assist import cd2str, d2lst,join,arrange,m_char
+from engpy.misc.assist import copy,deepcopy,get_exprs
+from engpy.misc.miscs import simp_var
+from engpy.misc.vars import alpha
+from engpy.misc.abilities import numable,intable
+from engpy.errors.exceptions import *
 
 
 class cos:

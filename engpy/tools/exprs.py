@@ -1,23 +1,29 @@
-import engpy.AI
+import engpy.AI  as AI
 from fractions import Fraction
 from math import *
 from engpy.fundamentals.primary import Num, break_pq
 from engpy.fundamentals.secondary import pascal, group_factor, difference_powers
 from engpy.fundamentals.assorted import GCD
-from engpy.misc.gen import con, reverse, getter, startwith, th, com_arrays, dict_uncommon
-from engpy.misc.gen import start_alpha_index, rev
-from engpy.misc.gen import check_rest, dstar, imap
+from engpy.misc.gen import (
+    con, reverse, getter,
+    startwith, th, com_arrays,
+    dict_uncommon, rev,
+    start_alpha_index, imap,
+    check_rest, dstar
+)
 from engpy.errors.exceptions import *
 from engpy.errors.wreck import Fizzle
-from engpy.misc.assist import m_char, copy, deepcopy, get_exprs, factor_out, num_mul, replacer
-from engpy.misc.assist import Dict, mul, Misc, join, get_den
-from engpy.misc.assist import refract, gk_en
+from engpy.misc.assist import (
+    m_char, copy, deepcopy,
+    get_exprs, factor_out,
+    num_mul, replacer, nest,
+    Dict, mul, Misc, join,
+    get_den, refract, gk_en
+)
 from engpy.misc.internals import iformat
 from engpy.misc.abilities import intable, numable
 from engpy.misc.scan.scan_expr import scan_MD
-from engpy.misc.vars import alpha_greek as alpha
-from engpy.misc.vars import greek_map, constants
-from engpy.misc.vars import chars
+from engpy.misc.vars import alpha_greek as alpha, greek_map, constants, chars
 from engpy.misc.helpers import toClass, cross, Mul
 from engpy.misc.miscs import num, alnum, numity
 from engpy.lib.transforms import Transforms
@@ -2155,22 +2161,31 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
         """
         return deepcopy(self, 'expr')
 
-    def factorize(self, perfect=True):
+    def factorize(self, level=None, perfect=True):
         list_expr = list(self.struct)
+        if len(list_expr) == 1: return self
         common = Expr(GCD(*list_expr))
-        if len(self) == 1: return self
+        #print(common, self)
         rem_expr_ = factor_out(self, common)
+        #print(rem_expr_)
         adder, rem_expr = difference_powers(rem_expr_, sep=True)
+        #print(adder.expr, rem_expr)
+        if level and adder and rem_expr:
+            rem_expr, adder = rem_expr_, 0
         adder_2 = rem_expr.ppowers(sep=True) if not isinstance(rem_expr, (int,float)) else (0, rem_expr)
+        #print(adder_2,'tttba')
         adder += adder_2[0]; rem_expr = adder_2[1]
-        if not rem_expr: return adder
-        elif adder: return adder + rem_expr.factorize()
+        #print(adder,'thbtrbn', rem_expr)
+        if not rem_expr: return nest(adder, True, common)
+        elif adder: return nest(adder + rem_expr.factorize(), True, common)
         trial_1, inpart = group_factor(rem_expr, proofing=True), False
+        #print(format(trial_1), 3343)
         if trial_1:
             if GCD(*list(trial_1.struct)) != 1:
-                new_factor = trial_1.factorize()
+                new_factor = trial_1.factorize(level=level)
             else:
-                new_factor, inpart = trial_1, True
+                new_factor = rem_expr if level else trial_1
+                inpart = True
         else:
             new_factor = rem_expr
         new_factor = adder + new_factor if adder else new_factor

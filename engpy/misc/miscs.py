@@ -92,7 +92,7 @@ def alnum(al, exp=False):
         try:
             Expr
         except NameError:
-            from tools.exprs import Expr
+            from engpy.tools.exprs import Expr
         exp = Expr(format(al)); simp = exp.desolved
         nmm = numity(simp)
         return nmm if nmm is not None else simp

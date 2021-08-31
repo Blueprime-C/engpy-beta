@@ -27,6 +27,13 @@ alpha_greek = alpha + greeks
 greek_map = dict(zip(greek_eng_Upper + greek_eng_misc + greek_eng_Lower,
                      greeks)
                  )
-constants = {chr(960): 3.141592653589793,
-             chr(553) : 2.718281828459045}
+constants = {
+    chr(960): 3.141592653589793,
+    chr(553): 2.718281828459045
+}
 
+
+def variable_generator(context=''):
+    for alphabet in alpha:
+        if alphabet not in context:
+            yield alphabet
