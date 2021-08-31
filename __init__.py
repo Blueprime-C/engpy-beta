@@ -1,3 +1,3 @@
-from .arrays import *
-from .fundamentals import *
-from .tools import *
+from engpy.arrays import *
+from engpy.fundamentals import *
+from engpy.tools import *
