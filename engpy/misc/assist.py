@@ -8,7 +8,7 @@ from engpy.errors.exceptions import *
 from concurrent.futures import ProcessPoolExecutor
 
 
-def wrap(char,char_space):
+def wrap(char, char_space):
     string = ''; char = str(char)
     string = m_char(' ',((char_space-len(char))//2) + (char_space-len(char)) % 2)
     string += char
@@ -219,16 +219,21 @@ def gk_en(alp):
     
 
 class Dict:
+
     def __init__(self,dic):
         if not isinstance(dic,(dict,list)):
             raise UnacceptableToken
         self.dic = dic
+
     def __hash__(self):
         return self.dic.__str__().__hash__()
+
     def __eq__(self,other):
         return hash(self) == hash(other)
+
     def __repr__(self):
         return str(self.dic)
+
     @property
     def list(self):
         return [[keys, values] for keys, values in self.dic.items()]
@@ -392,3 +397,6 @@ def number_generator(context=''):
             count += 1
             continue
         yield count
+
+        count += 1
+

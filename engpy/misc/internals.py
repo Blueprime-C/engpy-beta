@@ -19,6 +19,7 @@ def check_ind(exprs, unity = False):
 
 
 def nested(expr):
+    print(expr.expr, len(expr))
     coeff, var = expr.__extract__
     for vars_ in var:
         if getter(vars_, 'name') == 'Expr': return True
@@ -36,4 +37,28 @@ def unnest(expr):
             else:
                 new_dict[vars_] = powers
         expr = coeff * mul_ * expr.recreate({1: [new_dict]}) if new_dict else coeff * mul_
+        print('....')
     return expr
+
+
+def unnest_with_powers(expr):
+    result = expr.new
+    for coeff, var in expr.expr.items():
+        new_var = {}
+        if len(var) > 1:
+            return expr
+        for _expr, power in var[0].items():
+            if getter(_expr, 'name') == 'Expr':
+                if len(_expr) == 1:
+                    coeff_expr, var_expr = _expr.__extract__
+                    coeff *= coeff_expr
+                    if len(var_expr) == 1:
+                        var_ = list(var_expr)[0]
+                        index = var_expr[var_]
+                        var_expr[var_] = 1
+                    new_var.update({_expr: power * index})
+            else:
+                new_var.update({_expr: power})
+    result += expr.form()({coeff: [new_var]})
+
+    return result

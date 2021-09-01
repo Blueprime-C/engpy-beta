@@ -2185,6 +2185,7 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
                 new_factor = trial_1.factorize(level=level)
             else:
                 new_factor = rem_expr if level else trial_1
+
                 inpart = True
         else:
             new_factor = rem_expr
@@ -2201,6 +2202,8 @@ class Expr(ExpressionObjectClass, Utilities.expr, BasicOperatorsClassABC, Utilit
             if '' in factorized.expr[1][0]:
                 factorized.expr[1][0].pop('')
             factorized *= coeff
+        if '' in factorized.expr[1][0]:
+            factorized.expr[1][0].pop('')
         return factorized
 
     @classmethod
@@ -4256,8 +4259,11 @@ class Eqns(ExpressionObjectClass):
             if not matrix:
                 for eqns in self_:
                     rays += [eqns.coeff(var) for var in gvar_list]
+
                     rays.append(-eqns.const)
+                    print(rays, 'rays')
                 rays = Matrix_([len(self), len(gvar_list) + 1] + rays)
+                print(rays)
             else:
                 rays = matrix.__copy__()
             reduced = rays.echelon()
@@ -4534,6 +4540,7 @@ class Eqns(ExpressionObjectClass):
         shift = 0
         elm = 1
         if matrix or self_.islinear:
+            print('linear', self_.islinear)
             matrix_rays()
             if len(xtra) == len(gvar_list):
                 reset()
