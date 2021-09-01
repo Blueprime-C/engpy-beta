@@ -1,5 +1,6 @@
 import engpy.tools.exprs as exprs
 from engpy.misc.abilities import numable
+from engpy.misc.internals import unnest_with_powers
 from engpy.misc.miscs import _isinstance
 from engpy.misc.gen import getter
 from engpy.misc.scan.scan_expr import scan_MD
@@ -110,8 +111,11 @@ class Fraction:
         
     def partial(self):
         new_den = self.den.factorize(level=1)
-        print(format(new_den))
+        print(new_den.expr, format(new_den), '................')
+        new_den = unnest_with_powers(new_den)
+        print(format(new_den), 'trthwt', new_den.expr)
         try:
+
             coeff, products = new_den.__extract__
             var_list, var_gen, working_vars = self.vars, variable_generator(self.vars), []
             partials, variable = self.den.new, self.vars[0]
@@ -128,7 +132,11 @@ class Fraction:
 
                 for i in range(index):
                     product = self.den.form()({1: [{var: i + 1}]})
-                    partials += next(var_gen) / product
+                    print(product.expr, '2122212121')
+                    v = self.den.form()(next(var_gen)) / product
+                    print(v.expr, format(v))
+                    partials += v
+                    print(partials.expr,'rr3rgvr3',format(partials))
 
         except OperationNotAllowed:
             return self
@@ -138,7 +146,8 @@ class Fraction:
             while True:
                 try:
                     value = next(number_gen)
-                    equations.add(Eqn(partials.cal(**{variable: value}), self.cal({variable: value})))
+                    print('value', value)
+                    equations.add(Eqn((partials.cal(**{variable: value}) + self.cal({variable: value})).simp(), 0))
                     break
                 except (ZeroDivisionError, InvalidOperation) as e:
                     pass
@@ -280,7 +289,8 @@ class Fraction:
         return format(self) > format(other)
 
     def __copy__(self):
-        return Fraction(self.num.duplicate(),self.den.duplicate())
+        return Fraction(self.num.duplicate(), self.den.duplicate())
+
     def __repr__(self):
         return self.__str__()
 
@@ -296,5 +306,5 @@ class Fraction:
         return self - other
 
     def __round__(self, fix):
-        return Fraction(round(self.num,fix), round(self.den, fix))
-        
+        return Fraction(round(self.num, fix), round(self.den, fix))
+
